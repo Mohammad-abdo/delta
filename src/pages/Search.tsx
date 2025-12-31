@@ -21,7 +21,7 @@ const SearchPage = () => {
     return src;
   };
 
-  const { data, isLoading, refetch, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["global-search", q],
     queryFn: async () => {
       try {
@@ -32,13 +32,9 @@ const SearchPage = () => {
       }
     },
     enabled: q.trim().length > 0,
+    refetchOnWindowFocus: false,
+    staleTime: 30000, // Cache for 30 seconds
   });
-
-  useEffect(() => {
-    if (q.trim().length > 0) {
-      refetch();
-    }
-  }, [q, refetch]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

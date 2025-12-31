@@ -48,11 +48,10 @@ const Products = () => {
   const { data: productsData, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: productsAPI.getAll,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false, // Prevent infinite loops
     refetchOnMount: true,
-    staleTime: 0, // Always consider data stale
-    gcTime: 0, // Don't cache
-    cacheTime: 0, // Legacy support
+    staleTime: 2 * 60 * 1000, // Consider data fresh for 2 minutes
+    gcTime: 5 * 60 * 1000, // Keep in cache for 5 minutes
   });
 
   // Ensure products is always an array

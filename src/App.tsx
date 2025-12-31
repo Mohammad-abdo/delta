@@ -47,11 +47,10 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false, // Prevent infinite loops on focus
       refetchOnMount: true,
-      staleTime: 0, // Always consider data stale - disable cache
-      gcTime: 0, // Don't cache - disable cache
-      cacheTime: 0, // Legacy support - disable cache
+      staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+      gcTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
     },
   },
 });
