@@ -15,4 +15,17 @@ export default defineConfig({
     },
   },
   assetsInclude: ["**/*.JPG", "**/*.jpg", "**/*.png", "**/*.PNG"],
+  build: {
+    // Ensure proper MIME types in build
+    rollupOptions: {
+      output: {
+        // Ensure JS files have correct extension
+        entryFileNames: "assets/[name].[hash].js",
+        chunkFileNames: "assets/[name].[hash].js",
+        assetFileNames: "assets/[name].[hash].[ext]",
+      },
+    },
+  },
+  // Copy .htaccess to dist during build
+  publicDir: "public",
 });
