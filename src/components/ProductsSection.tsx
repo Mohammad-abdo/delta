@@ -45,7 +45,7 @@ const ProductsSection = () => {
 
   const { data: productsData, isLoading } = useQuery({
     queryKey: ["products", "home"],
-    queryFn: productsAPI.getAll,
+    queryFn: productsAPI.getAllPublic, // Use public endpoint
   });
 
   const products = Array.isArray(productsData) ? productsData : [];

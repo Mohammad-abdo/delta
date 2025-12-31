@@ -14,6 +14,13 @@ import { productsAPI } from "@/lib/api";
  */
 const SingleProduct = () => {
   const { id } = useParams<{ id: string }>();
+  
+  // Debug: Log product ID
+  useEffect(() => {
+    console.log('SingleProduct - Product ID from URL:', id);
+    console.log('SingleProduct - Product ID as Number:', Number(id));
+  }, [id]);
+  
   const [imageError, setImageError] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
@@ -28,31 +35,42 @@ const SingleProduct = () => {
     return src;
   };
 
-  const { data: product, isLoading } = useQuery({
+  const { data: product, isLoading, error } = useQuery({
     queryKey: ["product", id],
     queryFn: async () => {
-      const data = await productsAPI.getById(Number(id));
-      
-      // Log for debugging
-      if (data) {
-        console.log('=== Product Data from API ===');
-        console.log('ID:', data.id);
-        console.log('Name:', data.name);
-        console.log('Has imageUrl:', !!data.imageUrl);
-        console.log('imageUrl type:', typeof data.imageUrl);
-        console.log('imageUrl length:', data.imageUrl?.length || 0);
+      try {
+        const data = await productsAPI.getById(Number(id));
         
-        if (data.imageUrl) {
-          console.log('imageUrl starts with:', data.imageUrl.substring(0, 60));
-          console.log('Is base64:', data.imageUrl.startsWith('data:image/'));
+        // Log for debugging
+        if (data) {
+          console.log('=== Product Data from API ===');
+          console.log('ID:', data.id);
+          console.log('Name:', data.name);
+          console.log('Has imageUrl:', !!data.imageUrl);
+          console.log('imageUrl type:', typeof data.imageUrl);
+          console.log('imageUrl length:', data.imageUrl?.length || 0);
+          
+          if (data.imageUrl) {
+            console.log('imageUrl starts with:', data.imageUrl.substring(0, 60));
+            console.log('Is base64:', data.imageUrl.startsWith('data:image/'));
+          }
+          
+          console.log('============================');
+        } else {
+          console.error('Product not found - data is null');
         }
         
-        console.log('============================');
+        return data;
+      } catch (err: any) {
+        console.error('Error fetching product:', err);
+        if (err.status === 404) {
+          throw new Error('المنتج غير موجود');
+        }
+        throw err;
       }
-      
-      return data;
     },
     enabled: Boolean(id),
+    retry: 1,
   });
 
   // Update image source when product changes
@@ -128,7 +146,28 @@ const SingleProduct = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
+          <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4 animate-pulse" />
           <h1 className="text-2xl font-bold text-primary mb-2">جاري تحميل المنتج...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <X className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h1 className="text-4xl font-bold text-primary mb-4">خطأ في تحميل المنتج</h1>
+          <p className="text-muted-foreground mb-4">{String(error)}</p>
+          <div className="flex gap-4 justify-center">
+            <Button asChild>
+              <Link to="/products">العودة إلى المنتجات</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/">الصفحة الرئيسية</Link>
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -138,10 +177,17 @@ const SingleProduct = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
+          <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-primary mb-4">المنتج غير موجود</h1>
-          <Button asChild>
-            <Link to="/">العودة إلى الصفحة الرئيسية</Link>
-          </Button>
+          <p className="text-muted-foreground mb-4">المنتج الذي تبحث عنه غير موجود أو تم حذفه</p>
+          <div className="flex gap-4 justify-center">
+            <Button asChild>
+              <Link to="/products">العودة إلى المنتجات</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/">الصفحة الرئيسية</Link>
+            </Button>
+          </div>
         </div>
       </div>
     );

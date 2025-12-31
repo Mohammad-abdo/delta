@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Package, BookOpen, FileText, Settings, TrendingUp, Users } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { productsAPI, blogAPI } from "@/lib/api";
+import { productsAPI, blogAPI, authAPI } from "@/lib/api";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -11,11 +11,14 @@ import { Button } from "@/components/ui/button";
  * Main dashboard showing overview statistics and quick actions.
  */
 const Dashboard = () => {
+  const isAuthenticated = authAPI.isAuthenticated();
+
   const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: productsAPI.getAll,
     retry: false,
     refetchOnWindowFocus: false,
+    enabled: isAuthenticated, // Only fetch when authenticated
   });
 
   const { data: blogPosts } = useQuery({
@@ -23,6 +26,7 @@ const Dashboard = () => {
     queryFn: blogAPI.getAll,
     retry: false,
     refetchOnWindowFocus: false,
+    enabled: isAuthenticated, // Only fetch when authenticated
   });
 
   const stats = [

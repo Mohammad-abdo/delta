@@ -33,9 +33,11 @@ const roleOptions = [
 
 const Users = () => {
   const queryClient = useQueryClient();
-  const { data: users, isLoading } = useQuery({
+  const { data: users, isLoading, error } = useQuery({
     queryKey: ["users"],
-    queryFn: usersAPI.list,
+    queryFn: usersAPI.getAll,
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   const createMutation = useMutation({
@@ -96,6 +98,10 @@ const Users = () => {
         <CardContent>
           {isLoading ? (
             <div className="text-center py-8">جاري التحميل...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-red-500">
+              خطأ في تحميل المستخدمين: {String(error)}
+            </div>
           ) : (
             <Table>
               <TableHeader>

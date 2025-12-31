@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Package } from "lucide-react";
@@ -15,9 +15,11 @@ import { useTranslation } from "react-i18next";
  */
 const Products = () => {
   const { t, i18n } = useTranslation();
-  const { data: productsData, isLoading } = useQuery({
+  const { data: productsData, isLoading, error } = useQuery({
     queryKey: ["products", "public"],
-    queryFn: productsAPI.getAll,
+    queryFn: productsAPI.getAllPublic, // Use public endpoint
+    retry: 2,
+    refetchOnWindowFocus: false,
   });
 
   const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
@@ -34,22 +36,31 @@ const Products = () => {
   // Filter products based on language
   const filteredProducts = useMemo(() => {
     if (i18n.language === 'en') {
-      // For English: show only products with English content
-      return allProducts.filter((product: any) => product.nameEn && product.nameEn.trim() !== '');
+      // For English: show products with English content, or fallback to Arabic if no English
+      return allProducts.filter((product: any) => 
+        (product.nameEn && product.nameEn.trim() !== '') || 
+        (product.name && product.name.trim() !== '')
+      );
     } else {
-      // For Arabic: show only products with Arabic content
+      // For Arabic: show products with Arabic content
       return allProducts.filter((product: any) => product.name && product.name.trim() !== '');
     }
   }, [allProducts, i18n.language]);
 
   const categories = useMemo(
-    () => Array.from(new Set(filteredProducts.map((p: any) => {
-      // Use appropriate category based on language
-      if (i18n.language === 'en' && p.categoryEn) {
-        return p.categoryEn;
-      }
-      return p.category;
-    }).filter(Boolean))) as string[],
+    () => {
+      const cats = Array.from(new Set(filteredProducts.map((p: any) => {
+        // Use appropriate category based on language
+        if (i18n.language === 'en' && p.categoryEn) {
+          return p.categoryEn;
+        }
+        return p.category;
+      }).filter(Boolean))) as string[];
+      
+      // Debug: Log categories
+      console.log("Categories found:", cats.length, cats);
+      return cats;
+    },
     [filteredProducts, i18n.language],
   );
 
@@ -70,6 +81,15 @@ const Products = () => {
 
   // Default to first category or "all"
   const defaultCategory = categories.length > 0 ? categories[0] : "all";
+
+  // Debug: Log products data
+  useEffect(() => {
+    if (productsData) {
+      console.log("Products data received:", productsData.length, "products");
+      console.log("Filtered products:", filteredProducts.length);
+      console.log("Categories:", categories.length);
+    }
+  }, [productsData, filteredProducts, categories]);
 
   return (
     <div className="min-h-screen relative">
@@ -102,22 +122,33 @@ const Products = () => {
             <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <p className="text-muted-foreground text-lg">{t("products.loading")}</p>
           </div>
-        ) : categories.length === 0 ? (
+        ) : error ? (
+          <div className="text-center py-12">
+            <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <p className="text-red-500 text-lg">خطأ في تحميل المنتجات</p>
+            <p className="text-muted-foreground text-sm mt-2">{String(error)}</p>
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="text-center py-12">
             <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <p className="text-muted-foreground text-lg">{t("products.noProducts")}</p>
+            {allProducts.length > 0 && (
+              <p className="text-muted-foreground text-sm mt-2">
+                تم العثور على {allProducts.length} منتج لكن لا يوجد منتجات متطابقة مع اللغة المحددة
+              </p>
+            )}
           </div>
         ) : (
-          <Tabs defaultValue={defaultCategory} className="w-full">
+          <Tabs defaultValue="all" className="w-full">
             <div className="mb-8" style={{ direction: 'rtl' }}>
               <TabsList className="flex flex-row flex-wrap gap-2 h-auto p-2 bg-muted/50 rounded-lg w-auto mr-0 ml-auto">
-                  <TabsTrigger value="all" className="text-sm sm:text-base flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {filteredProducts.length}
-                    </Badge>
-                    {t("nav.all")}
-                  </TabsTrigger>
-                {categories.map((category) => (
+                <TabsTrigger value="all" className="text-sm sm:text-base flex items-center gap-2">
+                  <Badge variant="secondary" className="text-xs">
+                    {filteredProducts.length}
+                  </Badge>
+                  {t("nav.all")}
+                </TabsTrigger>
+                {categories.length > 0 && categories.map((category) => (
                   <TabsTrigger key={category} value={category} className="text-sm sm:text-base flex items-center gap-2">
                     <Badge variant="secondary" className="text-xs">
                       {productsByCategory[category]?.length || 0}
