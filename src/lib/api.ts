@@ -4,7 +4,7 @@
  * Centralized API functions for all backend endpoints
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "https://back.deltasteelmill.com/api";
 
 // Helper function to get auth token from localStorage
 const getAuthToken = (): string | null => {

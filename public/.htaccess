@@ -15,12 +15,29 @@
 
 # Set correct MIME types for JavaScript modules
 <IfModule mod_mime.c>
-  # JavaScript files
+  # JavaScript files - MUST be application/javascript for ES modules
   AddType application/javascript .js
   AddType application/javascript .mjs
   AddType application/javascript .jsx
   AddType application/javascript .ts
   AddType application/javascript .tsx
+  
+  # Force MIME type for assets directory (works without mod_headers)
+  <FilesMatch "\.js$">
+    ForceType application/javascript
+  </FilesMatch>
+  
+  <FilesMatch "\.mjs$">
+    ForceType application/javascript
+  </FilesMatch>
+</IfModule>
+
+# Set Content-Type header if mod_headers is available
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|mjs)$">
+    Header set Content-Type "application/javascript; charset=utf-8"
+  </FilesMatch>
+</IfModule>
   
   # JSON files
   AddType application/json .json
