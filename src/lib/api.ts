@@ -22,11 +22,27 @@ const getCurrentUserFromStorage = () => {
   }
 };
 
+// Error type with status code
+interface ApiError extends Error {
+  status: number;
+}
+
+// Auth response type
+interface AuthResponse {
+  token: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  };
+}
+
 // Generic fetch wrapper with auth
-const apiFetch = async (
+const apiFetch = async <T = unknown>(
   endpoint: string,
   options: RequestInit = {}
-): Promise<any> => {
+): Promise<T> => {
   const token = getAuthToken();
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -46,34 +62,34 @@ const apiFetch = async (
     // Handle 404 specifically
     if (response.status === 404) {
       const error = await response.json().catch(() => ({ message: "Not Found" }));
-      const err = new Error(error.message || "Not Found");
-      (err as any).status = 404;
+      const err = new Error(error.message || "Not Found") as ApiError;
+      err.status = 404;
       throw err;
     }
     
     // Handle 401 Unauthorized
     if (response.status === 401) {
       const error = await response.json().catch(() => ({ message: "Unauthorized" }));
-      const err = new Error(error.message || "Unauthorized");
-      (err as any).status = 401;
+      const err = new Error(error.message || "Unauthorized") as ApiError;
+      err.status = 401;
       throw err;
     }
     
     // Handle other errors
     const error = await response.json().catch(() => ({ message: "Request failed" }));
-    const err = new Error(error.message || `HTTP error! status: ${response.status}`);
-    (err as any).status = response.status;
+    const err = new Error(error.message || `HTTP error! status: ${response.status}`) as ApiError;
+    err.status = response.status;
     throw err;
   }
 
-  return response.json();
+  return response.json() as Promise<T>;
 };
 
 // ==================== AUTH API ====================
 
 export const authAPI = {
   login: async (email: string, password: string) => {
-    const response = await apiFetch("/auth/login", {
+    const response = await apiFetch<AuthResponse>("/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
@@ -88,7 +104,7 @@ export const authAPI = {
   },
 
   register: async (name: string, email: string, password: string) => {
-    const response = await apiFetch("/auth/register", {
+    const response = await apiFetch<AuthResponse>("/auth/register", {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
     });
@@ -122,12 +138,12 @@ export const productsAPI = {
   getAllPublic: () => apiFetch("/products"), // Public - no auth required
   get: (id: number) => apiFetch(`/products/${id}`), // Public - no auth required
   getById: (id: number) => apiFetch(`/products/${id}`), // Alias for get - Public
-  create: (data: any) =>
+  create: (data: Record<string, unknown>) =>
     apiFetch("/admin/products", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  update: (id: number, data: any) =>
+  update: (id: number, data: Record<string, unknown>) =>
     apiFetch(`/admin/products/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -149,12 +165,12 @@ export const blogAPI = {
   get: (id: number) => apiFetch(`/blog/${id}`),
   listPublished: () => apiFetch("/blog"), // Public endpoint for published posts
   getPublished: (id: number) => apiFetch(`/blog/${id}`), // Public endpoint for single post
-  create: (data: any) =>
+  create: (data: Record<string, unknown>) =>
     apiFetch("/admin/blog", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  update: (id: number, data: any) =>
+  update: (id: number, data: Record<string, unknown>) =>
     apiFetch(`/admin/blog/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -177,12 +193,12 @@ export const servicesAPI = {
     return apiFetch(endpoint);
   },
   getService: (id: number) => apiFetch(`/services/${id}`),
-  createService: (data: any) =>
+  createService: (data: Record<string, unknown>) =>
     apiFetch("/admin/services/services", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  updateService: (id: number, data: any) =>
+  updateService: (id: number, data: Record<string, unknown>) =>
     apiFetch(`/admin/services/services/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -192,12 +208,12 @@ export const servicesAPI = {
       method: "DELETE",
     }),
   // Category management
-  createCategory: (data: any) =>
+  createCategory: (data: Record<string, unknown>) =>
     apiFetch("/admin/services/categories", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  updateCategory: (id: number, data: any) =>
+  updateCategory: (id: number, data: Record<string, unknown>) =>
     apiFetch(`/admin/services/categories/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -219,12 +235,12 @@ export const searchAPI = {
 export const usersAPI = {
   getAll: () => apiFetch("/admin/users"),
   get: (id: number) => apiFetch(`/admin/users/${id}`),
-  create: (data: any) =>
+  create: (data: Record<string, unknown>) =>
     apiFetch("/admin/users", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  update: (id: number, data: any) =>
+  update: (id: number, data: Record<string, unknown>) =>
     apiFetch(`/admin/users/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -237,17 +253,24 @@ export const usersAPI = {
 
 // ==================== PAGES API ====================
 
+interface Page {
+  id: number;
+  slug: string;
+  content?: string;
+  [key: string]: unknown;
+}
+
 export const pagesAPI = {
-  getAll: () => apiFetch("/admin/pages"),
-  get: (id: number) => apiFetch(`/admin/pages/${id}`),
-  getBySlug: (slug: string) => apiFetch(`/pages/${slug}`),
-  create: (data: any) =>
-    apiFetch("/admin/pages", {
+  getAll: () => apiFetch<Page[]>("/admin/pages"),
+  get: (id: number) => apiFetch<Page>(`/admin/pages/${id}`),
+  getBySlug: (slug: string) => apiFetch<Page>(`/pages/${slug}`),
+  create: (data: Record<string, unknown>) =>
+    apiFetch<Page>("/admin/pages", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  update: (id: number, data: any) =>
-    apiFetch(`/admin/pages/${id}`, {
+  update: (id: number, data: Record<string, unknown>) =>
+    apiFetch<Page>(`/admin/pages/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     }),
@@ -260,12 +283,13 @@ export const pagesAPI = {
 // ==================== PAGE-BASED CONTENT APIs ====================
 // These use the Pages API with specific slugs
 
-const getPageBySlug = async (slug: string) => {
+const getPageBySlug = async (slug: string): Promise<Page | null> => {
   try {
     return await pagesAPI.getBySlug(slug);
-  } catch (error: any) {
+  } catch (error) {
     // If page doesn't exist (404), return null
-    if (error.status === 404 || error.message?.includes("404") || error.message?.includes("Not Found")) {
+    const apiError = error as ApiError;
+    if (apiError.status === 404 || apiError.message?.includes("404") || apiError.message?.includes("Not Found")) {
       return null;
     }
     // For other errors, rethrow
@@ -273,7 +297,7 @@ const getPageBySlug = async (slug: string) => {
   }
 };
 
-const createOrUpdatePage = async (slug: string, data: any) => {
+const createOrUpdatePage = async (slug: string, data: Record<string, unknown>) => {
   try {
     // Try to get existing page
     const existing = await getPageBySlug(slug);
@@ -281,7 +305,7 @@ const createOrUpdatePage = async (slug: string, data: any) => {
     if (existing) {
       // Find the page ID from admin pages list
       const allPages = await pagesAPI.getAll();
-      const page = allPages.find((p: any) => p.slug === slug);
+      const page = allPages.find((p) => p.slug === slug);
       if (page) {
         return await pagesAPI.update(page.id, { ...data, slug });
       }
@@ -309,7 +333,7 @@ export const settingsAPI = {
     }
     return {};
   },
-  update: async (data: any) => {
+  update: async (data: Record<string, unknown>) => {
     return await createOrUpdatePage("settings", {
       title: "Settings",
       content: JSON.stringify(data),
@@ -331,7 +355,7 @@ export const heroAPI = {
     }
     return { slides: [] };
   },
-  update: async (data: any) => {
+  update: async (data: Record<string, unknown>) => {
     return await createOrUpdatePage("hero", {
       title: "Hero Section",
       content: JSON.stringify(data),
@@ -353,7 +377,7 @@ export const aboutAPI = {
     }
     return {};
   },
-  update: async (data: any) => {
+  update: async (data: Record<string, unknown>) => {
     return await createOrUpdatePage("about", {
       title: "About",
       content: JSON.stringify(data),
@@ -375,7 +399,7 @@ export const strategyAPI = {
     }
     return {};
   },
-  update: async (data: any) => {
+  update: async (data: Record<string, unknown>) => {
     return await createOrUpdatePage("strategy", {
       title: "Strategy",
       content: JSON.stringify(data),
@@ -397,7 +421,7 @@ export const qualityAPI = {
     }
     return {};
   },
-  update: async (data: any) => {
+  update: async (data: Record<string, unknown>) => {
     return await createOrUpdatePage("quality", {
       title: "Quality",
       content: JSON.stringify(data),
@@ -419,7 +443,7 @@ export const visionMissionAPI = {
     }
     return {};
   },
-  update: async (data: any) => {
+  update: async (data: Record<string, unknown>) => {
     return await createOrUpdatePage("vision-mission", {
       title: "Vision & Mission",
       content: JSON.stringify(data),
@@ -441,7 +465,7 @@ export const ceoMessageAPI = {
     }
     return {};
   },
-  update: async (data: any) => {
+  update: async (data: Record<string, unknown>) => {
     return await createOrUpdatePage("ceo-message", {
       title: "CEO Message",
       content: JSON.stringify(data),
@@ -463,7 +487,7 @@ export const laboratoryEquipmentAPI = {
     }
     return {};
   },
-  update: async (data: any) => {
+  update: async (data: Record<string, unknown>) => {
     return await createOrUpdatePage("laboratory-equipment", {
       title: "Laboratory Equipment",
       content: JSON.stringify(data),
