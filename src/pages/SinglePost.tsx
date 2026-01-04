@@ -15,7 +15,7 @@ import { resolveImageUrl } from "@/lib/imageUtils";
  */
 const SinglePost = () => {
   const { id } = useParams<{ id: string }>();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const resolveImage = resolveImageUrl;
 
@@ -33,12 +33,12 @@ const SinglePost = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg text-muted-foreground">جاري تحميل المقال...</p>
+        <p className="text-lg text-muted-foreground">
+          {i18n.language === 'en' ? 'Loading post...' : 'جاري تحميل المقال...'}
+        </p>
       </div>
     );
   }
-
-  const { t } = useTranslation();
 
   if (!post) {
     return (

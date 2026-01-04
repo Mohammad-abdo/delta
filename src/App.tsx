@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { logger } from "@/utils/logger";
 import Layout from "./components/Layout";
 import TopHeader from "./components/TopHeader";
@@ -107,6 +107,7 @@ const App = () => {
             <Route path="/services" element={<Layout><LaboratoryEquipment /></Layout>} />
             <Route path="/news" element={<Layout><Blog /></Layout>} />
             <Route path="/partners" element={<Layout><Partners /></Layout>} />
+            <Route path="/blog" element={<Navigate to="/news" replace />} />
             <Route path="/blog/:id" element={<Layout><SinglePost /></Layout>} />
             <Route path="/product/:id" element={<Layout><SingleProduct /></Layout>} />
             <Route path="/service/:id" element={<Layout><ServiceDetails /></Layout>} />

@@ -110,9 +110,18 @@ const Blog = () => {
           ) : filteredPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {filteredPosts.map((post: { id: number; date?: string; image?: string; titleEn?: string; title?: string; excerptEn?: string; excerpt?: string; category?: string }) => {
-                const formattedDate = post.date
-                  ? new Date(post.date).toLocaleDateString(i18n.language === 'en' ? "en-US" : "ar-EG")
-                  : "";
+                let formattedDate = "";
+                if (post.date) {
+                  try {
+                    const dateObj = new Date(post.date);
+                    if (!isNaN(dateObj.getTime())) {
+                      formattedDate = dateObj.toLocaleDateString(i18n.language === 'en' ? "en-US" : "ar-EG");
+                    }
+                  } catch (e) {
+                    // Invalid date, leave formattedDate as empty string
+                    console.warn("Invalid date format:", post.date);
+                  }
+                }
                 return (
                   <article
                     key={post.id}
