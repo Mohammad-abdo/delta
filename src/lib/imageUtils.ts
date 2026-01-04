@@ -9,11 +9,28 @@
  * Get the API origin URL (without /api suffix)
  */
 export const getApiOrigin = (): string => {
-  const apiBase = import.meta.env.VITE_API_URL || "";
-  // Remove /api suffix if present
-  return apiBase.replace(/\/api\/?$/, "");
+  // Always use production API in production builds
+  // Check if we're running on production domain
+  const isProduction = typeof window !== 'undefined' && 
+    (window.location.hostname === 'deltasteelmill.com' || 
+     window.location.hostname === 'www.deltasteelmill.com');
+  
+  if (isProduction) {
+    return "https://back.deltasteelmill.com";
+  }
+  
+  // For development, use environment variable or default to production
+  const apiBase = import.meta.env.VITE_API_URL || "https://back.deltasteelmill.com/api";
+  const origin = apiBase.replace(/\/api\/?$/, "");
+  
+  // Never return localhost - always use production API
+  if (origin.includes("localhost")) {
+    return "https://back.deltasteelmill.com";
+  }
+  
+  return origin;
 };
-
+//new
 /**
  * Resolve image URL to a full URL that can be used in img src
  * 
@@ -35,7 +52,7 @@ export const resolveImageUrl = (src?: string | null): string => {
   if (trimmedSrc.includes("localhost")) {
     // Extract /uploads/ path from localhost URL
     // Pattern: /uploads/ followed by filename (numbers, letters, dots, hyphens) and extension
-    const uploadsMatch = trimmedSrc.match(/\/uploads\/[^\/\s"'\?]+/);
+    const uploadsMatch = trimmedSrc.match(/\/uploads\/[^/\s"'?]+/);
     if (uploadsMatch) {
       // Remove any query parameters or fragments
       const cleanPath = uploadsMatch[0].split('?')[0].split('#')[0];
@@ -54,12 +71,23 @@ export const resolveImageUrl = (src?: string | null): string => {
   
   // Handle relative paths from uploads
   if (trimmedSrc.startsWith("/uploads/")) {
+    // ALWAYS use production API for relative paths - never localhost
+    // Check if we're on production domain first
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      if (hostname === 'deltasteelmill.com' || hostname === 'www.deltasteelmill.com') {
+        return `https://back.deltasteelmill.com${trimmedSrc}`;
+      }
+    }
+    
+    // Get API origin, but never use localhost
     const apiOrigin = getApiOrigin();
-    if (apiOrigin) {
+    if (apiOrigin && !apiOrigin.includes("localhost") && apiOrigin !== "") {
       return `${apiOrigin}${trimmedSrc}`;
     }
-    // If no API origin configured, return relative path (will be resolved by browser)
-    return trimmedSrc;
+    
+    // Final fallback: ALWAYS use production API
+    return `https://back.deltasteelmill.com${trimmedSrc}`;
   }
   
   // Return as-is for other cases
