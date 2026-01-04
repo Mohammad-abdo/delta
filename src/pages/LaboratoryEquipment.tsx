@@ -6,6 +6,7 @@ import { Beaker, Wrench, ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { servicesAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
 
 /**
  * Services Page - Dynamic
