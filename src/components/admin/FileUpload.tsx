@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import { resolveImageUrl } from "@/lib/imageUtils";
 
 interface FileUploadProps {
   value?: string;
