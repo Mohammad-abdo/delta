@@ -33,36 +33,42 @@ const LaboratoryEquipment = () => {
       
       // Also filter by language
       if (i18n.language === 'en') {
-        // For English: show categories with English content (nameEn or name)
-        return (category.nameEn && category.nameEn.trim() !== '') || (category.name && category.name.trim() !== '');
+        // For English: show categories with English name (name field contains English)
+        return category.name && category.name.trim() !== '';
       } else {
-        // For Arabic: show only categories with Arabic content (nameAr or name)
-        return (category.nameAr && category.nameAr.trim() !== '') || (category.name && category.name.trim() !== '');
+        // For Arabic: show categories with Arabic name (nameAr field contains Arabic)
+        return category.nameAr && category.nameAr.trim() !== '';
       }
     }).map((category: any) => {
       // Also filter services in categories
       const categoryServices = (category.services || []).filter((service: any) => {
         if (i18n.language === 'en') {
-          return service.nameEn && service.nameEn.trim() !== '';
+          // For English: show services with English name
+          return service.name && service.name.trim() !== '';
         } else {
-          return (service.nameAr && service.nameAr.trim() !== '') || (service.name && service.name.trim() !== '');
+          // For Arabic: show services with Arabic name
+          return service.nameAr && service.nameAr.trim() !== '';
         }
       });
 
       // Filter subcategories
       const categorySubcategories = (category.children || []).filter((sub: any) => {
         if (i18n.language === 'en') {
-          return (sub.nameEn && sub.nameEn.trim() !== '') || (sub.name && sub.name.trim() !== '');
+          // For English: show subcategories with English name
+          return sub.name && sub.name.trim() !== '';
         } else {
-          return (sub.nameAr && sub.nameAr.trim() !== '') || (sub.name && sub.name.trim() !== '');
+          // For Arabic: show subcategories with Arabic name
+          return sub.nameAr && sub.nameAr.trim() !== '';
         }
       }).map((sub: any) => {
         // Filter services in subcategories
         const subServices = (sub.services || []).filter((service: any) => {
           if (i18n.language === 'en') {
-            return service.nameEn && service.nameEn.trim() !== '';
+            // For English: show services with English name
+            return service.name && service.name.trim() !== '';
           } else {
-            return (service.nameAr && service.nameAr.trim() !== '') || (service.name && service.name.trim() !== '');
+            // For Arabic: show services with Arabic name
+            return service.nameAr && service.nameAr.trim() !== '';
           }
         });
         return { ...sub, services: subServices };
@@ -154,7 +160,7 @@ const LaboratoryEquipment = () => {
                   ) : (
                     <Beaker className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
                   )}
-                  {i18n.language === "ar" ? (category.nameAr || category.name) : (category.nameEn || category.name || category.nameAr)}
+                  {i18n.language === "ar" ? (category.nameAr || category.name) : (category.name || category.nameAr)}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -165,11 +171,11 @@ const LaboratoryEquipment = () => {
               const allServices = category.services || [];
               const filteredServices = allServices.filter((service: any) => {
                 if (i18n.language === 'en') {
-                  // For English: show only services with English content
-                  return service.nameEn && service.nameEn.trim() !== '';
+                  // For English: show services with English name
+                  return service.name && service.name.trim() !== '';
                 } else {
-                  // For Arabic: show only services with Arabic content (nameAr or name)
-                  return (service.nameAr && service.nameAr.trim() !== '') || (service.name && service.name.trim() !== '');
+                  // For Arabic: show services with Arabic name
+                  return service.nameAr && service.nameAr.trim() !== '';
                 }
               });
 
@@ -177,17 +183,21 @@ const LaboratoryEquipment = () => {
               const allSubcategories = category.children || [];
               const filteredSubcategories = allSubcategories.filter((sub: any) => {
                 if (i18n.language === 'en') {
-                  return (sub.nameEn && sub.nameEn.trim() !== '') || (sub.name && sub.name.trim() !== '');
+                  // For English: show subcategories with English name
+                  return sub.name && sub.name.trim() !== '';
                 } else {
-                  return (sub.nameAr && sub.nameAr.trim() !== '') || (sub.name && sub.name.trim() !== '');
+                  // For Arabic: show subcategories with Arabic name
+                  return sub.nameAr && sub.nameAr.trim() !== '';
                 }
               }).map((sub: any) => {
                 // Also filter services in subcategories
                 const subServices = (sub.services || []).filter((service: any) => {
                   if (i18n.language === 'en') {
-                    return service.nameEn && service.nameEn.trim() !== '';
+                    // For English: show services with English name
+                    return service.name && service.name.trim() !== '';
                   } else {
-                    return (service.nameAr && service.nameAr.trim() !== '') || (service.name && service.name.trim() !== '');
+                    // For Arabic: show services with Arabic name
+                    return service.nameAr && service.nameAr.trim() !== '';
                   }
                 });
                 return { ...sub, services: subServices };
@@ -209,7 +219,7 @@ const LaboratoryEquipment = () => {
                       {service.imageUrl ? (
                       <img
                         src={resolveImage(service.imageUrl)}
-                        alt={i18n.language === "ar" ? (service.nameAr || service.name) : (service.nameEn || service.name || service.nameAr)}
+                        alt={i18n.language === "ar" ? (service.nameAr || service.name) : (service.name || service.nameAr)}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                       ) : (
@@ -226,7 +236,7 @@ const LaboratoryEquipment = () => {
                     {/* Content Section */}
                     <CardContent className="p-6 space-y-3 text-right" dir="rtl">
                       <h3 className="text-xl sm:text-2xl font-bold text-primary group-hover:text-primary/80 transition-colors line-clamp-2">
-                        {i18n.language === "ar" ? (service.nameAr || service.name) : (service.nameEn || service.name || service.nameAr)}
+                        {i18n.language === "ar" ? (service.nameAr || service.name) : (service.name || service.nameAr)}
                       </h3>
                       <p className="text-sm sm:text-base text-foreground/70 leading-relaxed line-clamp-3">
                         {truncateDescription(i18n.language === "ar" ? (service.description || "") : (service.descriptionEn || service.description || ""), 120)}
@@ -251,7 +261,7 @@ const LaboratoryEquipment = () => {
                             value={sub.id.toString()}
                             className="text-sm sm:text-base font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg transition-all whitespace-nowrap"
                           >
-                            {i18n.language === "ar" ? (sub.nameAr || sub.name) : (sub.nameEn || sub.name || sub.nameAr)}
+                            {i18n.language === "ar" ? (sub.nameAr || sub.name) : (sub.name || sub.nameAr)}
                           </TabsTrigger>
                         ))}
                       </TabsList>

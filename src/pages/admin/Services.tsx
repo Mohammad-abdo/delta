@@ -29,6 +29,7 @@ import { useForm } from "react-hook-form";
 import FileUpload from "@/components/admin/FileUpload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RichTextEditor from "@/components/RichTextEditor";
+import { useTranslation } from "react-i18next";
 
 /**
  * Services Management Page
@@ -355,6 +356,8 @@ const CategoryDialog = ({ open, onOpenChange, category }: CategoryDialogProps) =
   const queryClient = useQueryClient();
   const isEditing = !!category;
   const categories = queryClient.getQueryData<any[]>(["services", "categories", "admin"]) || [];
+  const { i18n } = useTranslation();
+  const [currentTab, setCurrentTab] = useState<"ar" | "en">("ar");
 
   const { register, handleSubmit, reset, watch, setValue } = useForm({
     defaultValues: category || {
@@ -370,6 +373,29 @@ const CategoryDialog = ({ open, onOpenChange, category }: CategoryDialogProps) =
 
   const iconValue = watch("icon");
   const parentValue = watch("parentId");
+  const nameValue = watch("name");
+  const nameArValue = watch("nameAr");
+  
+  // Detect if user is typing in English field - switch tab automatically
+  useEffect(() => {
+    if (nameValue && nameValue.trim() && !nameArValue) {
+      // If English name field has content but Arabic doesn't, switch to English view
+      setCurrentTab("en");
+    } else if (nameArValue && nameArValue.trim() && !nameValue) {
+      // If Arabic name field has content but English doesn't, switch to Arabic view
+      setCurrentTab("ar");
+    }
+  }, [nameValue, nameArValue]);
+  
+  // Get category display name based on current language/input
+  const getCategoryName = (cat: any) => {
+    // If user is on English tab or typing in English, show English first
+    if (currentTab === "en" || (nameValue && nameValue.trim() && !nameArValue)) {
+      return cat.name || cat.nameAr || "";
+    }
+    // Otherwise show Arabic first
+    return cat.nameAr || cat.name || "";
+  };
 
   useEffect(() => {
     reset(
@@ -404,7 +430,12 @@ const CategoryDialog = ({ open, onOpenChange, category }: CategoryDialogProps) =
   });
 
   const onSubmit = (data: any) => {
-    mutation.mutate(data);
+    // Ensure parentId is properly set (null for parent categories, number for child categories)
+    const formattedData = {
+      ...data,
+      parentId: data.parentId === null || data.parentId === undefined ? null : Number(data.parentId),
+    };
+    mutation.mutate(formattedData);
   };
 
   return (
@@ -457,12 +488,12 @@ const CategoryDialog = ({ open, onOpenChange, category }: CategoryDialogProps) =
                 <SelectValue placeholder="بدون تصنيف أب" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">بدون تصنيف أب</SelectItem>
+                <SelectItem value="none">بدون تصنيف أب (Parent Category)</SelectItem>
                 {categories
                   .filter((c) => !isEditing || c.id !== category?.id)
                   .map((cat) => (
                     <SelectItem key={cat.id} value={cat.id.toString()}>
-                      {cat.nameAr || cat.name}
+                      {getCategoryName(cat)}
                     </SelectItem>
                   ))}
               </SelectContent>
@@ -504,6 +535,8 @@ interface ServiceDialogProps {
 const ServiceDialog = ({ open, onOpenChange, service, categories }: ServiceDialogProps) => {
   const queryClient = useQueryClient();
   const isEditing = !!service;
+  const { i18n } = useTranslation();
+  const [currentTab, setCurrentTab] = useState<"ar" | "en">("ar");
 
   const resolveImage = resolveImageUrl;
 
@@ -529,6 +562,27 @@ const ServiceDialog = ({ open, onOpenChange, service, categories }: ServiceDialo
   const equipment = watch("equipment") || [];
   const description = watch("description") || "";
   const descriptionEn = watch("descriptionEn") || "";
+  const nameValue = watch("name");
+  const nameArValue = watch("nameAr");
+  
+  // Detect if user is typing in English field - switch tab automatically
+  useEffect(() => {
+    if (nameValue && nameValue.trim() && !nameArValue) {
+      setCurrentTab("en");
+    } else if (nameArValue && nameArValue.trim() && !nameValue) {
+      setCurrentTab("ar");
+    }
+  }, [nameValue, nameArValue]);
+  
+  // Get category display name based on current language/input
+  const getCategoryName = (cat: any) => {
+    // If user is on English tab or typing in English, show English first
+    if (currentTab === "en" || (nameValue && nameValue.trim() && !nameArValue)) {
+      return cat.name || cat.nameAr || "";
+    }
+    // Otherwise show Arabic first
+    return cat.nameAr || cat.name || "";
+  };
 
   useEffect(() => {
     reset(
@@ -629,7 +683,7 @@ const ServiceDialog = ({ open, onOpenChange, service, categories }: ServiceDialo
             <Label>الاسم بالعربية</Label>
             <Input {...register("nameAr")} required />
           </div>
-          <Tabs defaultValue="ar" className="w-full">
+          <Tabs value={currentTab} onValueChange={(v) => setCurrentTab(v as "ar" | "en")} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="ar">العربية</TabsTrigger>
               <TabsTrigger value="en">English</TabsTrigger>
@@ -671,7 +725,7 @@ const ServiceDialog = ({ open, onOpenChange, service, categories }: ServiceDialo
               <SelectContent>
                 {categories.map((cat: any) => (
                   <SelectItem key={cat.id} value={cat.id.toString()}>
-                    {cat.nameAr || cat.name}
+                    {getCategoryName(cat)}
                   </SelectItem>
                 ))}
               </SelectContent>
