@@ -38,13 +38,19 @@ const SinglePost = () => {
     );
   }
 
+  const { t } = useTranslation();
+
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-primary mb-4">المقال غير موجود</h1>
+          <h1 className="text-4xl font-bold text-primary mb-4">
+            {i18n.language === 'en' ? 'Post Not Found' : 'المقال غير موجود'}
+          </h1>
           <Button asChild>
-            <Link to="/blog">العودة إلى المدونة</Link>
+            <Link to="/news">
+              {i18n.language === 'en' ? 'Back to News' : 'العودة إلى الأخبار'}
+            </Link>
           </Button>
         </div>
       </div>
@@ -65,9 +71,9 @@ const SinglePost = () => {
           {/* Back Button */}
           <div className="mb-8">
             <Button asChild variant="ghost">
-              <Link to="/blog" className="flex items-center gap-2">
+              <Link to="/news" className="flex items-center gap-2">
                 <ArrowRight className="w-4 h-4" />
-                العودة إلى المدونة
+                {i18n.language === 'en' ? 'Back to News' : 'العودة إلى الأخبار'}
               </Link>
             </Button>
           </div>
@@ -94,36 +100,22 @@ const SinglePost = () => {
           </div>
 
           {/* Featured Image */}
-          {(() => {
-            const imageSrc = post.image ? resolveImage(post.image) : null;
-            
-            if (imageSrc && imageSrc.trim()) {
-              const isBase64 = imageSrc.startsWith('data:image/');
-              const isHttpUrl = imageSrc.startsWith('http://') || imageSrc.startsWith('https://');
-              const isRelativePath = imageSrc.startsWith('/');
-              
-              if (isBase64 || isHttpUrl || isRelativePath) {
-                return (
-                  <div className="mb-8 rounded-2xl overflow-hidden shadow-xl bg-muted">
-                    <img
-                      src={imageSrc}
-                      alt={i18n.language === 'en' && post.titleEn ? post.titleEn : post.title}
-                      className="w-full h-96 object-contain bg-white"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                        const parent = (e.target as HTMLImageElement).parentElement;
-                        if (parent) {
-                          parent.innerHTML = '<div class="w-full h-96 flex items-center justify-center bg-muted"><svg class="w-16 h-16 text-muted-foreground/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>';
-                        }
-                      }}
-                    />
-                  </div>
-                );
-              }
-            }
-            
-            return null;
-          })()}
+          {post.image && (
+            <div className="mb-8 rounded-2xl overflow-hidden shadow-xl bg-muted">
+              <img
+                src={resolveImage(post.image)}
+                alt={i18n.language === 'en' && post.titleEn ? post.titleEn : (post.title || '')}
+                className="w-full h-96 object-contain bg-white"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  const parent = (e.target as HTMLImageElement).parentElement;
+                  if (parent) {
+                    parent.innerHTML = '<div class="w-full h-96 flex items-center justify-center bg-muted"><svg class="w-16 h-16 text-muted-foreground/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>';
+                  }
+                }}
+              />
+            </div>
+          )}
 
           {/* Post Content */}
           <article className="prose prose-lg max-w-none">
@@ -138,7 +130,9 @@ const SinglePost = () => {
           <div className="mt-16 pt-8 border-t border-muted">
             <div className="flex items-center gap-2 mb-6">
               <BookOpen className="w-5 h-5 text-primary" />
-              <h2 className="text-2xl font-bold text-primary">مقالات ذات صلة</h2>
+              <h2 className="text-2xl font-bold text-primary">
+                {i18n.language === 'en' ? 'Related Posts' : 'مقالات ذات صلة'}
+              </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {relatedPosts.map((relatedPost: any) => (

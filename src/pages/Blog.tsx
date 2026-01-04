@@ -28,28 +28,27 @@ const Blog = () => {
     refetchOnWindowFocus: true,
   });
 
-  const allPosts = Array.isArray(postsData) ? postsData : [];
-
   // Filter posts based on language
   const posts = useMemo(() => {
+    const allPosts = Array.isArray(postsData) ? postsData : [];
     if (i18n.language === 'en') {
       // For English: show only posts with English content (titleEn)
-      return allPosts.filter((post: any) => post.titleEn && post.titleEn.trim() !== '');
+      return allPosts.filter((post: { titleEn?: string; title?: string }) => post.titleEn && post.titleEn.trim() !== '');
     } else {
       // For Arabic: show only posts with Arabic content (title)
-      return allPosts.filter((post: any) => post.title && post.title.trim() !== '');
+      return allPosts.filter((post: { title?: string }) => post.title && post.title.trim() !== '');
     }
-  }, [allPosts, i18n.language]);
+  }, [postsData, i18n.language]);
 
   const categories = useMemo(() => {
     const found = new Set<string>();
-    posts.forEach((p: any) => {
+    posts.forEach((p: { category?: string }) => {
       if (p.category) found.add(p.category);
     });
     return ["all", ...Array.from(found)];
   }, [posts]);
 
-  const filteredPosts = posts.filter((post: any) => {
+  const filteredPosts = posts.filter((post: { titleEn?: string; title?: string; excerptEn?: string; excerpt?: string; category?: string }) => {
     const titleToSearch = i18n.language === 'en' ? (post.titleEn || post.title || '') : (post.title || '');
     const excerptToSearch = i18n.language === 'en' ? (post.excerptEn || post.excerpt || '') : (post.excerpt || '');
     const matchesSearch =
@@ -110,9 +109,9 @@ const Blog = () => {
             <div className="text-center py-12">{t("blog.loading")}</div>
           ) : filteredPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {filteredPosts.map((post: any) => {
+              {filteredPosts.map((post: { id: number; date?: string; image?: string; titleEn?: string; title?: string; excerptEn?: string; excerpt?: string; category?: string }) => {
                 const formattedDate = post.date
-                  ? new Date(post.date).toLocaleDateString("ar-EG")
+                  ? new Date(post.date).toLocaleDateString(i18n.language === 'en' ? "en-US" : "ar-EG")
                   : "";
                 return (
                   <article
@@ -122,39 +121,25 @@ const Blog = () => {
                     {/* Post Image */}
                     <Link to={`/blog/${post.id}`}>
                       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 to-sky/10">
-                        {(() => {
-                          const imageSrc = post.image ? resolveImage(post.image) : null;
-                          
-                          if (imageSrc && imageSrc.trim()) {
-                            const isBase64 = imageSrc.startsWith('data:image/');
-                            const isHttpUrl = imageSrc.startsWith('http://') || imageSrc.startsWith('https://');
-                            const isRelativePath = imageSrc.startsWith('/');
-                            
-                            if (isBase64 || isHttpUrl || isRelativePath) {
-                              return (
-                                <img
-                                  src={imageSrc}
-                                  alt={i18n.language === 'en' && post.titleEn ? post.titleEn : post.title}
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).style.display = 'none';
-                                    const parent = (e.target as HTMLImageElement).parentElement;
-                                    if (parent) {
-                                      const placeholder = parent.querySelector('.image-placeholder') as HTMLElement;
-                                      if (placeholder) placeholder.style.display = 'flex';
-                                    }
-                                  }}
-                                />
-                              );
-                            }
-                          }
-                          
-                          return (
-                            <div className="w-full h-full flex items-center justify-center image-placeholder">
-                              <BookOpen className="w-16 h-16 text-primary/20" />
-                            </div>
-                          );
-                        })()}
+                        {post.image ? (
+                          <img
+                            src={resolveImage(post.image)}
+                            alt={i18n.language === 'en' && post.titleEn ? post.titleEn : (post.title || '')}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                              const parent = (e.target as HTMLImageElement).parentElement;
+                              if (parent) {
+                                const placeholder = parent.querySelector('.image-placeholder') as HTMLElement;
+                                if (placeholder) placeholder.style.display = 'flex';
+                              }
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center image-placeholder">
+                            <BookOpen className="w-16 h-16 text-primary/20" />
+                          </div>
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         
                         {/* Category Badge */}
@@ -179,13 +164,13 @@ const Blog = () => {
                       {/* Title */}
                       <Link to={`/blog/${post.id}`}>
                         <h3 className="text-xl font-bold text-primary mb-3 group-hover:text-primary/80 transition-colors line-clamp-2">
-                          {i18n.language === 'en' && post.titleEn ? post.titleEn : post.title}
+                          {i18n.language === 'en' ? (post.titleEn || post.title || '') : (post.title || '')}
                         </h3>
                       </Link>
 
                       {/* Excerpt */}
                       <p className="text-muted-foreground leading-relaxed mb-4 line-clamp-3">
-                        {i18n.language === 'en' && post.excerptEn ? post.excerptEn : post.excerpt}
+                        {i18n.language === 'en' ? (post.excerptEn || post.excerpt || '') : (post.excerpt || '')}
                       </p>
 
                       {/* Read More Button */}
