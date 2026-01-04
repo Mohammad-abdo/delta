@@ -6,6 +6,7 @@ import { BookOpen, Calendar, ArrowLeft, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { blogAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
 
 /**
  * News Page (formerly Blog)
@@ -19,19 +20,7 @@ const Blog = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src || !src.trim()) return "";
-    // Handle base64 images
-    if (src.startsWith("data:image/")) return src;
-    // Handle full URLs
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    // Handle relative paths from uploads
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    // Return as-is for other cases (might be base64 without prefix or relative path)
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const { data: postsData, isLoading } = useQuery({
     queryKey: ["publicBlogPosts"],

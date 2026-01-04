@@ -67,7 +67,6 @@ const RichTextEditor = ({
     "strike",
     "blockquote",
     "list",
-    "bullet",
     "indent",
     "script",
     "align",

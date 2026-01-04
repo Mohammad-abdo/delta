@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { ArrowRight, Package, CheckCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { productsAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
+import { useTranslation } from "react-i18next";
 
 /**
  * Single Product Page
@@ -14,6 +16,7 @@ import { productsAPI } from "@/lib/api";
  */
 const SingleProduct = () => {
   const { id } = useParams<{ id: string }>();
+  const { i18n, t } = useTranslation();
   
   // Debug: Log product ID
   useEffect(() => {
@@ -26,14 +29,7 @@ const SingleProduct = () => {
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   const blobUrlRef = useRef<string | null>(null);
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const { data: product, isLoading, error } = useQuery({
     queryKey: ["product", id],
@@ -218,7 +214,7 @@ const SingleProduct = () => {
                   <img
                       key={`img-${product.id}`}
                       src={blobUrl || imageSrc}
-                    alt={product.name}
+                    alt={i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
                       className="w-full h-auto object-contain max-h-96 mx-auto"
                       crossOrigin="anonymous"
                       decoding="async"
@@ -246,7 +242,8 @@ const SingleProduct = () => {
                           console.log('Retrying with blob URL...');
                           // Force re-render with blob URL
                           setTimeout(() => {
-                            const newImg = document.querySelector(`img[alt="${product.name}"]`) as HTMLImageElement;
+                            const productName = i18n.language === 'en' && product.nameEn ? product.nameEn : product.name;
+                            const newImg = document.querySelector(`img[alt="${productName}"]`) as HTMLImageElement;
                             if (newImg && newImg.src !== blobUrl) {
                               newImg.src = blobUrl;
                             }
@@ -304,7 +301,7 @@ const SingleProduct = () => {
                         >
                           <img
                             src={img}
-                            alt={`${product.name} - صورة ${index + 1}`}
+                            alt={`${i18n.language === 'en' && product.nameEn ? product.nameEn : product.name} - ${i18n.language === 'en' ? `Image ${index + 1}` : `صورة ${index + 1}`}`}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                             onError={(e) => {
                               (e.target as HTMLImageElement).style.display = 'none';
@@ -324,13 +321,17 @@ const SingleProduct = () => {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Package className="w-6 h-6 text-primary" />
-                  <span className="text-sm text-muted-foreground">منتجنا</span>
+                  <span className="text-sm text-muted-foreground">
+                    {i18n.language === 'en' ? 'Our Product' : 'منتجنا'}
+                  </span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-                  {product.name}
+                  {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
                 </h1>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  {product.fullDescription}
+                  {i18n.language === 'en' && product.fullDescriptionEn 
+                    ? product.fullDescriptionEn 
+                    : (product.fullDescription || product.description)}
                 </p>
               </div>
 
@@ -351,7 +352,9 @@ const SingleProduct = () => {
                 
                 return specs.length > 0 ? (
               <div className="bg-white rounded-xl p-6 shadow-md border border-muted">
-                <h2 className="text-2xl font-bold text-primary mb-4">المواصفات</h2>
+                <h2 className="text-2xl font-bold text-primary mb-4">
+                  {i18n.language === 'en' ? 'Specifications' : 'المواصفات'}
+                </h2>
                 <ul className="space-y-3">
                       {specs.map((spec: string, index: number) => (
                     <li key={index} className="flex items-start gap-3">
@@ -381,7 +384,9 @@ const SingleProduct = () => {
                 
                 return apps.length > 0 ? (
               <div className="bg-white rounded-xl p-6 shadow-md border border-muted">
-                <h2 className="text-2xl font-bold text-primary mb-4">مجالات التطبيق</h2>
+                <h2 className="text-2xl font-bold text-primary mb-4">
+                  {i18n.language === 'en' ? 'Applications' : 'مجالات التطبيق'}
+                </h2>
                 <ul className="space-y-3">
                       {apps.map((app: string, index: number) => (
                     <li key={index} className="flex items-start gap-3">
@@ -396,7 +401,9 @@ const SingleProduct = () => {
 
               {/* Contact Button */}
               <Button asChild size="lg" className="w-full bg-gradient-to-r from-primary to-sky">
-                <Link to="/contact">تواصل معنا للاستفسار</Link>
+                <Link to="/contact">
+                  {i18n.language === 'en' ? 'Contact Us for Inquiry' : 'تواصل معنا للاستفسار'}
+                </Link>
               </Button>
             </div>
           </div>

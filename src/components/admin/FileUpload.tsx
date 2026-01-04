@@ -26,15 +26,7 @@ const FileUpload = ({
   maxSize = 10,
   className = "",
 }: FileUploadProps) => {
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("data:image/")) return src; // Base64 images
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const resolvedValue = value ? resolveImage(value) : null;
   const [preview, setPreview] = useState<string | null>(resolvedValue);

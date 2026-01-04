@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { blogAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import FileUpload from "@/components/admin/FileUpload";
@@ -37,19 +38,7 @@ const Blog = () => {
   const [editingPost, setEditingPost] = useState<any>(null);
   const queryClient = useQueryClient();
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src || !src.trim()) return "";
-    // Handle base64 images
-    if (src.startsWith("data:image/")) return src;
-    // Handle full URLs
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    // Handle relative paths from uploads
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    // Return as-is for other cases (might be base64 without prefix or relative path)
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const { data: postsData, isLoading } = useQuery({
     queryKey: ["blogPosts"],
@@ -211,19 +200,7 @@ const BlogPostDialog = ({ open, onOpenChange, post }: BlogPostDialogProps) => {
   const isEditing = !!post;
   const [activeTab, setActiveTab] = useState<"ar" | "en">("ar");
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src || !src.trim()) return "";
-    // Handle base64 images
-    if (src.startsWith("data:image/")) return src;
-    // Handle full URLs
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    // Handle relative paths from uploads
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    // Return as-is for other cases (might be base64 without prefix or relative path)
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const initialValues =
     post

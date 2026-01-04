@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { productsAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import FileUpload from "@/components/admin/FileUpload";
@@ -36,14 +37,7 @@ const Products = () => {
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const queryClient = useQueryClient();
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const { data: productsData, isLoading } = useQuery({
     queryKey: ["products"],
@@ -228,14 +222,7 @@ const ProductDialog = ({ open, onOpenChange, product }: ProductDialogProps) => {
     },
   });
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const imageValue = watch("imageUrl");
   const gallery = watch("gallery") || [];
@@ -337,6 +324,9 @@ const ProductDialog = ({ open, onOpenChange, product }: ProductDialogProps) => {
           <DialogTitle>
             {isEditing ? "تعديل المنتج" : "إضافة منتج جديد"}
           </DialogTitle>
+          <DialogDescription>
+            {isEditing ? "قم بتعديل معلومات المنتج أدناه" : "املأ المعلومات أدناه لإضافة منتج جديد"}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "ar" | "en")}>
@@ -370,23 +360,23 @@ const ProductDialog = ({ open, onOpenChange, product }: ProductDialogProps) => {
             
             <TabsContent value="en" className="space-y-4">
               <div>
-                <Label>اسم المنتج (English)</Label>
-                <Input {...register("nameEn")} />
+                <Label>Product Name (English)</Label>
+                <Input {...register("nameEn")} placeholder="Enter product name in English" />
               </div>
               <div>
-                <Label>الفئة (English)</Label>
+                <Label>Category (English)</Label>
                 <Input {...register("categoryEn")} placeholder="Gears / Tools ..." />
               </div>
               <div>
-                <Label>الوصف القصير (English)</Label>
-                <Textarea {...register("descriptionEn")} />
+                <Label>Short Description (English)</Label>
+                <Textarea {...register("descriptionEn")} placeholder="Enter short description in English" />
               </div>
               <div>
-                <Label>الوصف الكامل (English)</Label>
-                <Textarea {...register("fullDescriptionEn")} rows={4} />
+                <Label>Full Description (English)</Label>
+                <Textarea {...register("fullDescriptionEn")} rows={4} placeholder="Enter full description in English" />
               </div>
               <div>
-                <Label>المادة (English)</Label>
+                <Label>Material (English)</Label>
                 <Input {...register("materialEn")} placeholder="e.g: Steel / Iron ..." />
               </div>
             </TabsContent>

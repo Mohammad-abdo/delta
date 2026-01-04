@@ -23,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { servicesAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import FileUpload from "@/components/admin/FileUpload";
@@ -187,14 +188,7 @@ const ServicesTab = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>();
   const queryClient = useQueryClient();
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const { data: categoriesData } = useQuery({
     queryKey: ["services", "categories", "admin"],
@@ -420,6 +414,9 @@ const CategoryDialog = ({ open, onOpenChange, category }: CategoryDialogProps) =
           <DialogTitle>
             {isEditing ? "تعديل التصنيف" : "إضافة تصنيف جديد"}
           </DialogTitle>
+          <DialogDescription>
+            {isEditing ? "قم بتعديل معلومات التصنيف أدناه" : "املأ المعلومات أدناه لإضافة تصنيف جديد"}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -508,14 +505,7 @@ const ServiceDialog = ({ open, onOpenChange, service, categories }: ServiceDialo
   const queryClient = useQueryClient();
   const isEditing = !!service;
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const { register, handleSubmit, reset, setValue, watch } = useForm({
     defaultValues: service || {
@@ -626,6 +616,9 @@ const ServiceDialog = ({ open, onOpenChange, service, categories }: ServiceDialo
           <DialogTitle>
             {isEditing ? "تعديل الخدمة" : "إضافة خدمة جديدة"}
           </DialogTitle>
+          <DialogDescription>
+            {isEditing ? "قم بتعديل معلومات الخدمة أدناه" : "املأ المعلومات أدناه لإضافة خدمة جديدة"}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>

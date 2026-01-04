@@ -5,9 +5,11 @@ import { useTranslation } from "react-i18next";
 import { ArrowRight, Beaker, Wrench, CheckCircle2, Sparkles, X, ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { servicesAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import "@/styles/rich-text.css";
 
@@ -24,9 +26,7 @@ const ServiceDetails = () => {
   const [selectedGallery, setSelectedGallery] = useState<string[]>([]);
   const [galleryIndex, setGalleryIndex] = useState(0);
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
+  const resolveImage = resolveImageUrl;
     if (!src) return "";
     if (src.startsWith("http://") || src.startsWith("https://")) return src;
     if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
@@ -259,6 +259,7 @@ const ServiceDetails = () => {
       {/* Image Gallery Modal */}
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
         <DialogContent className="max-w-5xl w-full p-0">
+          <DialogDescription className="sr-only">معرض الصور - عرض صورة الخدمة</DialogDescription>
           {selectedImage && (
             <div className="relative">
               <button

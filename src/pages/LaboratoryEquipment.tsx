@@ -70,9 +70,7 @@ const LaboratoryEquipment = () => {
       return { ...category, services: categoryServices, children: categorySubcategories };
     });
   }, [allCategories, i18n.language]);
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
+  const resolveImage = resolveImageUrl;
     if (!src) return "";
     if (src.startsWith("http://") || src.startsWith("https://")) return src;
     if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;

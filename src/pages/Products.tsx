@@ -5,6 +5,7 @@ import { Package } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { productsAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -22,14 +23,7 @@ const Products = () => {
     refetchOnWindowFocus: false,
   });
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const allProducts: any[] = Array.isArray(productsData) ? productsData : [];
 
@@ -202,14 +196,7 @@ const Products = () => {
 // Product Card Component
 const ProductCard = ({ product, index }: { product: any; index: number }) => {
   const { t, i18n } = useTranslation();
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const cardThemes = [
     { gradient: "from-primary via-primary/90 to-primary/80", bg: "bg-primary", text: "text-white", accent: "bg-white/20", border: "border-primary/30" },

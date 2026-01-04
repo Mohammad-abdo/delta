@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Package } from "lucide-react";
 import { productsAPI } from "@/lib/api";
+import { useTranslation } from "react-i18next";
 
 /**
  * ProductsSection Component
@@ -14,6 +15,7 @@ import { productsAPI } from "@/lib/api";
  */
 const ProductsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     // Intersection Observer for scroll animations
@@ -161,7 +163,7 @@ const ProductsSection = () => {
                           <div className="relative h-full flex items-center justify-center p-3 sm:p-4 md:p-6">
                             <img
                               src={product.image}
-                              alt={product.name}
+                              alt={i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
                               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700 drop-shadow-lg"
                             />
                           </div>
@@ -172,12 +174,12 @@ const ProductsSection = () => {
                       <div className="flex-1 flex flex-col">
                         {/* Product Name */}
                         <h3 className={`text-lg sm:text-xl md:text-2xl font-bold ${theme.text} mb-1.5 sm:mb-2 md:mb-3 group-hover:scale-105 transition-transform duration-300`}>
-                          {product.name}
+                          {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
                         </h3>
                         
                         {/* Description */}
                         <p className={`${theme.text}/90 leading-relaxed text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-6 flex-1`}>
-                          {product.description}
+                          {i18n.language === 'en' && product.descriptionEn ? product.descriptionEn : product.description}
                         </p>
 
                         {/* Bottom Badge */}

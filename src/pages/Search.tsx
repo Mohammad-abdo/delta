@@ -5,21 +5,17 @@ import { Search as SearchIcon, Package, BookOpen, Wrench } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { searchAPI } from "@/lib/api";
+import { resolveImageUrl } from "@/lib/imageUtils";
 import { staticLaboratoryEquipment } from "@/data/laboratoryEquipment";
 import { staticProducts } from "@/data/products";
+import { useTranslation } from "react-i18next";
 
 const SearchPage = () => {
   const [params, setParams] = useSearchParams();
   const q = params.get("q") || "";
+  const { i18n } = useTranslation();
 
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
-  const apiOrigin = apiBase.replace(/\/api\/?$/, "");
-  const resolveImage = (src?: string) => {
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
+  const resolveImage = resolveImageUrl;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["global-search", q],
@@ -153,15 +149,15 @@ const SearchPage = () => {
                       className="block rounded-xl border border-muted bg-white p-4 hover:border-primary/40 hover:shadow-md transition-all"
                     >
                       <h3 className="font-semibold text-primary mb-1">
-                        {p.name}
+                        {i18n.language === 'en' && p.nameEn ? p.nameEn : p.name}
                       </h3>
-                      {p.category && (
+                      {(i18n.language === 'en' && p.categoryEn ? p.categoryEn : p.category) && (
                         <p className="text-xs text-muted-foreground mb-1">
-                          الفئة: {p.category}
+                          {i18n.language === 'en' ? 'Category' : 'الفئة'}: {i18n.language === 'en' && p.categoryEn ? p.categoryEn : p.category}
                         </p>
                       )}
                       <p className="text-sm text-muted-foreground line-clamp-2">
-                        {p.description}
+                        {i18n.language === 'en' && p.descriptionEn ? p.descriptionEn : p.description}
                       </p>
                     </Link>
                   ))}

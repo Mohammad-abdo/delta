@@ -6,6 +6,9 @@
 
 const API_BASE = import.meta.env.VITE_API_URL || "https://back.deltasteelmill.com/api";
 
+// Export image resolution utility
+export { resolveImageUrl, getApiOrigin } from "./imageUtils";
+
 // Helper function to get auth token from localStorage
 const getAuthToken = (): string | null => {
   return localStorage.getItem("authToken");
