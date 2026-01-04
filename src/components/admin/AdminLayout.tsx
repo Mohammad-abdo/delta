@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Package,
   BookOpen,
-  Settings,
   LogOut,
   Menu,
   X,
@@ -61,11 +60,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       title: "المدونة",
       icon: BookOpen,
       path: "/admin/blog",
-    },
-    {
-      title: "الإعدادات",
-      icon: Settings,
-      path: "/admin/settings",
     },
   ];
 

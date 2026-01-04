@@ -529,7 +529,11 @@ export const publicSettingsAPI = {
         }
       }
     } catch (error) {
-      console.error("Error fetching settings:", error);
+      // Silently handle 404 - settings page doesn't exist yet, use defaults
+      const apiError = error as ApiError;
+      if (apiError.status !== 404) {
+        console.error("Error fetching settings:", error);
+      }
     }
     return defaultSettingsData;
   },

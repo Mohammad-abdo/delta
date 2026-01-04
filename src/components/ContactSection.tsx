@@ -16,6 +16,8 @@ const ContactSection = () => {
     queryKey: ["public-settings"],
     queryFn: publicSettingsAPI.get,
     staleTime: 5 * 60 * 1000,
+    retry: false, // Don't retry on 404
+    refetchOnWindowFocus: false,
   });
 
   const mergedSettings = settings || defaultSettingsData;

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Package, BookOpen, FileText, Settings, TrendingUp, Users } from "lucide-react";
+import { Package, BookOpen, Wrench } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { productsAPI, blogAPI, authAPI } from "@/lib/api";
 import { Link } from "react-router-dom";
@@ -45,22 +45,6 @@ const Dashboard = () => {
       color: "text-green-600",
       bgColor: "bg-green-100",
       link: "/admin/blog",
-    },
-    {
-      title: "الصفحات",
-      value: 8,
-      icon: FileText,
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
-      link: "/admin/about",
-    },
-    {
-      title: "الإعدادات",
-      value: "فعال",
-      icon: Settings,
-      color: "text-orange-600",
-      bgColor: "bg-orange-100",
-      link: "/admin/settings",
     },
   ];
 
@@ -119,14 +103,8 @@ const Dashboard = () => {
             </Button>
             <Button asChild variant="outline" className="w-full justify-start">
               <Link to="/admin/services">
-                <FileText className="w-4 h-4 mr-2" />
+                <Wrench className="w-4 h-4 mr-2" />
                 إدارة الخدمات
-              </Link>
-            </Button>
-            <Button asChild variant="outline" className="w-full justify-start">
-              <Link to="/admin/settings">
-                <Settings className="w-4 h-4 mr-2" />
-                الإعدادات العامة
               </Link>
             </Button>
           </CardContent>
