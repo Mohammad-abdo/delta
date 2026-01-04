@@ -70,12 +70,8 @@ const LaboratoryEquipment = () => {
       return { ...category, services: categoryServices, children: categorySubcategories };
     });
   }, [allCategories, i18n.language]);
+  
   const resolveImage = resolveImageUrl;
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
 
   // Get default tab (first category) - this will be recalculated when categories change
   const defaultTab = useMemo(() => {

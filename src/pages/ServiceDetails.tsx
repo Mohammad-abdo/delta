@@ -27,11 +27,6 @@ const ServiceDetails = () => {
   const [galleryIndex, setGalleryIndex] = useState(0);
 
   const resolveImage = resolveImageUrl;
-    if (!src) return "";
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (src.startsWith("/uploads/")) return `${apiOrigin}${src}`;
-    return src;
-  };
 
   const { data: service, isLoading } = useQuery({
     queryKey: ["service", id],

@@ -31,13 +31,17 @@ export const resolveImageUrl = (src?: string | null): string => {
   }
   
   // Handle full URLs (http/https) - check for localhost FIRST
+  // This handles: http://localhost:4000/uploads/file.png, https://localhost:4000/uploads/file.png, etc.
   if (trimmedSrc.includes("localhost")) {
     // Extract /uploads/ path from localhost URL
-    const uploadsMatch = trimmedSrc.match(/\/uploads\/[^\/\s"']+(?:\.[a-zA-Z0-9]+)?/);
+    // Pattern: /uploads/ followed by filename (numbers, letters, dots, hyphens) and extension
+    const uploadsMatch = trimmedSrc.match(/\/uploads\/[^\/\s"'\?]+/);
     if (uploadsMatch) {
+      // Remove any query parameters or fragments
+      const cleanPath = uploadsMatch[0].split('?')[0].split('#')[0];
       // Convert to relative path and resolve using API origin
       const apiOrigin = getApiOrigin();
-      return apiOrigin ? `${apiOrigin}${uploadsMatch[0]}` : uploadsMatch[0];
+      return apiOrigin ? `${apiOrigin}${cleanPath}` : cleanPath;
     }
     // If localhost URL but no /uploads/ found, return empty
     return "";
