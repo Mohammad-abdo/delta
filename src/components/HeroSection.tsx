@@ -148,9 +148,10 @@ const HeroSection = () => {
       id="hero"
       className="relative w-full overflow-hidden pt-20 sm:pt-24 md:pt-28"
       style={{ 
-        height: isMobile ? '100vh' : '110vh',
-        minHeight: isMobile ? '100vh' : '110vh',
-        marginTop: '0'
+        height: isMobile ? '60vh' : '110vh',
+        maxHeight: isMobile ? '40vh' : '110vh',
+        marginTop:isMobile ? '75px' : '0',
+        marginBottom : isMobile ? '25px' : '0'
       }}
     >
       {/* Slides Container */}
@@ -219,7 +220,7 @@ const HeroSection = () => {
       </button>
 
       {/* Pagination Dots */}
-      <div className="absolute bottom-24 sm:bottom-32 md:bottom-48 lg:bottom-52 left-1/2 transform -translate-x-1/2 z-20 flex gap-2 sm:gap-3">
+      <div className="absolute bottom-5 sm:bottom-7 md:bottom-48 lg:bottom-28 left-1/2 transform -translate-x-1/2 z-20 flex gap-2 sm:gap-3">
         {slides.map((_, index) => (
           <button
             key={index}

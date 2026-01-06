@@ -147,13 +147,15 @@ const LaboratoryEquipment = () => {
 
           {/* Services Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="flex flex-row gap-2 w-full mb-12 h-auto p-2 bg-muted/50 rounded-xl border border-muted overflow-x-auto whitespace-nowrap" style={{ direction: "rtl" }}>
+            <TabsList className="flex flex-row gap-2 w-full mb-12 h-auto p-2 bg-muted/50 rounded-xl border border-muted overflow-x-scroll whitespace-nowrap" style={{ direction: "rtl" }}>
+            <div className="flex flex-row gap-2 w-full">
+
               {categories.map((category: any) => (
                 <TabsTrigger
-                  key={category.id}
-                  value={category.id.toString()}
-                  className="text-sm sm:text-base font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg transition-all whitespace-nowrap"
-                  dir="rtl"
+                key={category.id}
+                value={category.id.toString()}
+                className="text-sm sm:text-base font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg transition-all whitespace-nowrap w-fit"
+                dir="rtl"
                 >
                   {category.icon === "wrench" ? (
                     <Wrench className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
@@ -163,8 +165,8 @@ const LaboratoryEquipment = () => {
                   {i18n.language === "ar" ? (category.nameAr || category.name) : (category.name || category.nameAr)}
                 </TabsTrigger>
               ))}
+              </div>
             </TabsList>
-
             {/* Services Content with optional subcategories */}
             {categories.map((category: any) => {
               // Filter services based on language
@@ -255,6 +257,7 @@ const LaboratoryEquipment = () => {
                   {hasSub ? (
                     <Tabs defaultValue={subcategories[0]?.id?.toString()} className="w-full">
                       <TabsList className="flex flex-row gap-2 w-full mb-6 h-auto p-2 bg-muted/40 rounded-lg border border-muted overflow-x-auto whitespace-nowrap" style={{ direction: "rtl" }}>
+                      <div className="flex flex-row gap-2 w-full"> 
                         {subcategories.map((sub: any) => (
                           <TabsTrigger
                             key={sub.id}
@@ -264,6 +267,7 @@ const LaboratoryEquipment = () => {
                             {i18n.language === "ar" ? (sub.nameAr || sub.name) : (sub.name || sub.nameAr)}
                           </TabsTrigger>
                         ))}
+                      </div>
                       </TabsList>
                       {subcategories.map((sub: any) => (
                         <TabsContent key={sub.id} value={sub.id.toString()}>
