@@ -4,7 +4,7 @@
  * Centralized API functions for all backend endpoints
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "https://back.deltasteelmill.com/api";
 
 // Export image resolution utility
 export { resolveImageUrl, getApiOrigin } from "./imageUtils";
