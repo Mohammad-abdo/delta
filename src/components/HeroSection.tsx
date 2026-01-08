@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Play, X } from "lucide-react";
 import { heroAPI } from "@/lib/api";
-import heroImage from "@/assets/hero1.webp";
+import heroImage from "@/assets/hero5.jpeg";
 import steelProducts from "@/assets/hero4.webp";
 import qualityControl from "@/assets/hero3.webp";
 import videoThumbnail1 from "@/assets/115.webp";

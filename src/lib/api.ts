@@ -4,7 +4,7 @@
  * Centralized API functions for all backend endpoints
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || "https://back.deltasteelmill.com/api";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 // Export image resolution utility
 export { resolveImageUrl, getApiOrigin } from "./imageUtils";
@@ -326,20 +326,49 @@ const createOrUpdatePage = async (slug: string, data: Record<string, unknown>) =
 
 export const settingsAPI = {
   get: async () => {
-    const page = await getPageBySlug("settings");
-    if (page) {
-      try {
-        return JSON.parse(page.content || "{}");
-      } catch {
-        return {};
-      }
+    try {
+      const response = await apiFetch<Record<string, string>>("/settings");
+      console.log("Raw settings response from backend:", response);
+      
+      // Transform flat keys back to nested structure for backward compatibility
+      // e.g., contact_email -> contact.email
+      const unflattenObject = (flat: Record<string, string>): any => {
+        const result: any = {};
+        
+        Object.entries(flat).forEach(([key, value]) => {
+          const parts = key.split("_");
+          let current = result;
+          
+          // Navigate/create nested structure
+          for (let i = 0; i < parts.length - 1; i++) {
+            const part = parts[i];
+            if (!current[part]) {
+              current[part] = {};
+            }
+            current = current[part];
+          }
+          
+          // Set the final value
+          current[parts[parts.length - 1]] = value;
+        });
+        
+        return result;
+      };
+      
+      const unflattened = unflattenObject(response);
+      console.log("Unflattened settings:", unflattened);
+      return unflattened;
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      // Return default settings on error
+      return defaultSettingsData;
     }
-    return {};
   },
+  
   update: async (data: Record<string, unknown>) => {
-    return await createOrUpdatePage("settings", {
-      title: "Settings",
-      content: JSON.stringify(data),
+    return await apiFetch("/settings", {
+      method: "PUT",
+      body: JSON.stringify(data),
     });
   },
 };
@@ -502,6 +531,8 @@ export const laboratoryEquipmentAPI = {
 
 export const defaultSettingsData = {
   siteName: "شركة مصانع الدلتا للصلب",
+  logo: "",
+  heroBackgroundImage: "",
   contact: {
     email: "info@deltasteel.com",
     phone: "+20 123 456 7890",
@@ -519,23 +550,7 @@ export const defaultSettingsData = {
 
 export const publicSettingsAPI = {
   get: async () => {
-    try {
-      const page = await getPageBySlug("settings");
-      if (page) {
-        try {
-          return JSON.parse(page.content || "{}");
-        } catch {
-          return defaultSettingsData;
-        }
-      }
-    } catch (error) {
-      // Silently handle 404 - settings page doesn't exist yet, use defaults
-      const apiError = error as ApiError;
-      if (apiError.status !== 404) {
-        console.error("Error fetching settings:", error);
-      }
-    }
-    return defaultSettingsData;
+    return settingsAPI.get(); // Use the same endpoint as admin
   },
 };
 

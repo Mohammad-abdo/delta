@@ -10,6 +10,7 @@ import {
   Eye,
   Users,
   Wrench,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authAPI } from "@/lib/api";
@@ -60,6 +61,11 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       title: "المدونة",
       icon: BookOpen,
       path: "/admin/blog",
+    },
+    {
+      title: "الإعدادات",
+      icon: Settings,
+      path: "/admin/settings",
     },
   ];
 

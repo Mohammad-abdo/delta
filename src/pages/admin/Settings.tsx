@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { settingsAPI } from "@/lib/api";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import FileUpload from "@/components/admin/FileUpload";
 
 /**
@@ -18,11 +19,19 @@ const Settings = () => {
     queryFn: settingsAPI.get,
   });
 
-  const { register, handleSubmit, watch, setValue } = useForm({
+  const { register, handleSubmit, watch, setValue, reset } = useForm({
     defaultValues: settings || {},
   });
 
   const logoValue = watch("logo");
+  const heroBackgroundValue = watch("heroBackgroundImage");
+
+  // Update form values when settings are loaded
+  useEffect(() => {
+    if (settings) {
+      reset(settings);
+    }
+  }, [settings, reset]);
 
   const mutation = useMutation({
     mutationFn: (data: any) => settingsAPI.update(data),
@@ -30,9 +39,13 @@ const Settings = () => {
       queryClient.invalidateQueries({ queryKey: ["settings"] });
       toast.success("تم حفظ الإعدادات بنجاح");
     },
+    onError: () => {
+      toast.error("فشل في حفظ الإعدادات");
+    },
   });
 
   const onSubmit = (data: any) => {
+    console.log("Form data being submitted:", data);
     mutation.mutate(data);
   };
 
@@ -50,29 +63,6 @@ const Settings = () => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader>
-            <CardTitle>معلومات الموقع</CardTitle>
-            <CardDescription>الإعدادات الأساسية للموقع</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label>اسم الموقع</Label>
-              <Input
-                {...register("siteName")}
-                defaultValue={settings?.siteName}
-              />
-            </div>
-            <div>
-              <FileUpload
-                value={logoValue}
-                onChange={(url) => setValue("logo", url)}
-                label="شعار الموقع"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
         <Card className="mt-6">
           <CardHeader>
             <CardTitle>معلومات الاتصال</CardTitle>

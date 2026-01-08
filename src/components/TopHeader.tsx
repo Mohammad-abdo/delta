@@ -36,6 +36,7 @@ const TopHeader = () => {
     retry: false, // Don't retry on 404
     refetchOnWindowFocus: false,
   });
+  console.log(settings);
 
   const mergedSettings = settings || defaultSettingsData;
   const contactInfo = mergedSettings.contact || defaultSettingsData.contact;
