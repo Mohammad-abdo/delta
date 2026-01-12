@@ -1,4 +1,12 @@
-import { Phone, Mail, Linkedin, Facebook, Youtube, Twitter, Search } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  Linkedin,
+  Facebook,
+  Youtube,
+  Twitter,
+  Search,
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { publicSettingsAPI, defaultSettingsData } from "@/lib/api";
@@ -20,7 +28,7 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 
 /**
  * Top Header Component
- * 
+ *
  * Top information bar displaying contact information and social media links.
  * Appears above the main navigation bar.
  */
@@ -43,10 +51,30 @@ const TopHeader = () => {
   const social = mergedSettings.socialMedia || defaultSettingsData.socialMedia;
 
   const socialLinks = [
-    { icon: Linkedin, href: social.linkedin || "#", label: "LinkedIn", isCustom: false },
-    { icon: Facebook, href: social.facebook || "#", label: "Facebook", isCustom: false },
-    { icon: Twitter, href: social.twitter || "#", label: "Twitter", isCustom: false },
-    { icon: TikTokIcon, href: social.tiktok || "#", label: "TikTok", isCustom: true },
+    {
+      icon: Linkedin,
+      href: social.linkedin || "#",
+      label: "LinkedIn",
+      isCustom: false,
+    },
+    {
+      icon: Facebook,
+      href: social.facebook || "#",
+      label: "Facebook",
+      isCustom: false,
+    },
+    {
+      icon: Twitter,
+      href: social.twitter || "#",
+      label: "Twitter",
+      isCustom: false,
+    },
+    {
+      icon: TikTokIcon,
+      href: social.tiktok || "#",
+      label: "TikTok",
+      isCustom: true,
+    },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,16 +87,18 @@ const TopHeader = () => {
   return (
     <div className="fixed top-0 right-0 left-0 z-50 bg-primary text-primary-foreground py-2.5 sm:py-3.5 text-xs sm:text-sm">
       <div className="container mx-auto px-2 sm:px-4">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-5">
+        <div className="flex flex-row sm:flex-row items-center justify-center gap-2.5 sm:gap-5">
           {/* Contact Information */}
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-6 w-full sm:w-auto">
+          <div className=" hidden md:flex items-center justify-center sm:justify-start gap-3 sm:gap-6 w-full sm:w-auto">
             <a
               href={`tel:${contactInfo.phone}`}
               className="flex items-center gap-1.5 sm:gap-2 hover:text-accent transition-colors text-[11px] sm:text-sm"
               dir="ltr"
             >
               <Phone className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-              <span className="truncate max-w-[140px] sm:max-w-none">{contactInfo.phone}</span>
+              <span className="truncate max-w-[140px] sm:max-w-none">
+                {contactInfo.phone}
+              </span>
             </a>
             <a
               href={`mailto:${contactInfo.email}`}
@@ -76,7 +106,9 @@ const TopHeader = () => {
               dir="ltr"
             >
               <Mail className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-              <span className="truncate max-w-[180px] sm:max-w-none">{contactInfo.email}</span>
+              <span className="truncate max-w-[180px] sm:max-w-none">
+                {contactInfo.email}
+              </span>
             </a>
           </div>
 
@@ -127,4 +159,3 @@ const TopHeader = () => {
 };
 
 export default TopHeader;
-

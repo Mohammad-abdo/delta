@@ -8,7 +8,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 
 /**
  * Navbar Component
- * 
+ *
  * Main navigation bar that appears at the top of all pages.
  * Uses React Router for navigation between pages.
  * Includes scroll effect that changes appearance when scrolling.
@@ -25,7 +25,7 @@ const Navbar = () => {
 
   // Update document direction when language changes
   useEffect(() => {
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
@@ -40,7 +40,10 @@ const Navbar = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (homeDropdownRef.current && !homeDropdownRef.current.contains(event.target as Node)) {
+      if (
+        homeDropdownRef.current &&
+        !homeDropdownRef.current.contains(event.target as Node)
+      ) {
         setIsHomeDropdownOpen(false);
       }
     };
@@ -55,11 +58,14 @@ const Navbar = () => {
   }, [isHomeDropdownOpen]);
 
   const scrollToSection = (sectionId: string) => {
+    console.log(location.pathname);
     if (location.pathname !== "/") {
+      console.log(`/#${sectionId}`);
       window.location.href = `/#${sectionId}`;
     } else {
       const element = document.getElementById(sectionId);
       if (element) {
+        console.log(element);
         element.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
@@ -93,7 +99,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-10 sm:top-16 right-0 left-0 z-50 transition-base ${
+      className={`fixed top-12\ sm:top-16 right-0 left-0 z-50 transition-base ${
         isScrolled
           ? "bg-white/95 backdrop-blur-md shadow-lg"
           : "bg-white/90 backdrop-blur-sm"
@@ -113,7 +119,9 @@ const Navbar = () => {
               className="h-7 w-auto sm:h-10 md:h-12 object-contain group-hover:scale-105 transition-transform duration-300"
             />
             <span className="text-sm sm:text-base md:text-xl font-bold text-primary hidden sm:block">
-              {t("nav.home") === "Home" ? "Delta Steel Factories" : "مصانع الدلتا للصلب"}
+              {t("nav.home") === "Home"
+                ? "Delta Steel Factories"
+                : "مصانع الدلتا للصلب"}
             </span>
           </Link>
 
@@ -143,18 +151,16 @@ const Navbar = () => {
                 }`}
               >
                 {t("nav.home")}
-                <ChevronDown 
+                <ChevronDown
                   className={`w-3 h-3 transition-transform duration-200 ${
                     isHomeDropdownOpen ? "rotate-180" : ""
                   }`}
                 />
               </button>
-              
+
               {/* Dropdown Content */}
               {isHomeDropdownOpen && (
-                <div
-                  className="absolute top-full right-0 mt-0 w-56 bg-white rounded-lg shadow-lg border border-muted py-2 z-50"
-                >
+                <div className="absolute top-full right-0 mt-0 w-56 bg-white rounded-lg shadow-lg border border-muted py-2 z-50">
                   {homeDropdownItems.map((item) => (
                     <button
                       key={item.section}
@@ -186,21 +192,20 @@ const Navbar = () => {
 
           {/* Right side: language switcher and mobile menu button */}
           <div className="flex items-center justify-end gap-2">
-          <LanguageSwitcher />
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors flex-shrink-0"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-            ) : (
-              <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-            )}
-          </button>
+            <LanguageSwitcher />
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors flex-shrink-0"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+              ) : (
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+              )}
+            </button>
           </div>
-
         </div>
 
         {/* Mobile Menu */}
@@ -225,7 +230,13 @@ const Navbar = () => {
               {/* Home with Dropdown - Mobile */}
               <div className="px-3 sm:px-4 py-2.5 sm:py-3">
                 <button
-                  onClick={() => setIsHomeDropdownOpen(!isHomeDropdownOpen)}
+                  onClick={() => {
+                    setIsHomeDropdownOpen(!isHomeDropdownOpen);
+
+                    if (location.pathname !== "/") {
+                      window.location.href = "/";
+                    }
+                  }}
                   className={`w-full flex items-center justify-between text-sm sm:text-base font-medium rounded-lg transition-fast ${
                     location.pathname === "/"
                       ? "text-primary bg-muted"
@@ -233,13 +244,13 @@ const Navbar = () => {
                   }`}
                 >
                   <span>{t("nav.home")}</span>
-                  <ChevronDown 
+                  <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
                       isHomeDropdownOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
-                
+
                 {isHomeDropdownOpen && (
                   <div className="mt-1 pr-4 space-y-0.5">
                     {homeDropdownItems.map((item) => (
