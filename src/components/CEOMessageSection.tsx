@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { Quote, Sparkles } from "lucide-react";
-import chairmanImage from "@/assets/chairman.jpg";
+import chairmanImage from "@/assets/chairman.jpeg";
 
 /**
  * CEO Message Section Component
