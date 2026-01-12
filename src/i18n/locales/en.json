@@ -1,0 +1,383 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "noData": "No data available",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "update": "Update",
+    "search": "Search",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "actions": "Actions",
+    "name": "Name",
+    "description": "Description",
+    "image": "Image",
+    "category": "Category",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "optional": "Optional"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "products": "Products",
+    "services": "Our Services",
+    "news": "News",
+    "partners": "Partners",
+    "contact": "Contact Us",
+    "visionMission": "Vision & Mission",
+    "strategy": "Strategy",
+    "quality": "Quality, Environment & Safety Policy",
+    "ceoMessage": "Management Message",
+    "searchPlaceholder": "Search the site...",
+    "all": "All"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "location": "Our Location",
+    "rightsReserved": "All rights reserved",
+    "designedBy": "Designed by",
+    "companyDescription": "One of the oldest steel and castings production companies in Egypt and the Middle East",
+    "socialMedia": "Follow Us"
+  },
+  "home": {
+    "stats": {
+      "experience": "Rich Experience",
+      "experienceDesc": "Decades of Excellence",
+      "quality": "World Class Quality",
+      "qualityDesc": "ISO Standards",
+      "innovation": "Continuous Innovation",
+      "innovationDesc": "Modern Technologies",
+      "service": "Excellence Service",
+      "serviceDesc": "Customer Satisfaction"
+    }
+  },
+  "products": {
+    "title": "Our Products",
+    "subtitle": "Discover our complete range of high-quality steel and iron products",
+    "loading": "Loading products...",
+    "noProducts": "No products available at the moment",
+    "noProductsInCategory": "No products in this category",
+    "orderNow": "Order Now",
+    "viewDetails": "View Details",
+    "specifications": "Specifications",
+    "applications": "Applications",
+    "material": "Material",
+    "priceRange": "Price Range",
+    "category": "Category",
+    "unclassified": "Unclassified"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "We offer a comprehensive range of specialized services in the field of industry and analysis",
+    "loading": "Loading...",
+    "noServices": "No services available at the moment",
+    "noServicesInCategory": "No services in this category at the moment",
+    "noServicesInSubcategory": "No services in this subcategory at the moment",
+    "viewDetails": "View Details",
+    "readMore": "Read More",
+    "capabilities": "Capabilities",
+    "equipment": "Equipment"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We are here to answer your inquiries and communicate with you",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "message": "Message",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Your message has been sent successfully",
+    "error": "An error occurred while sending the message",
+    "address": "Address"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Welcome to the dashboard - Manage website content",
+      "products": "Products",
+      "blogPosts": "Blog Posts",
+      "pages": "Pages",
+      "settings": "Settings",
+      "active": "Active",
+      "quickActions": "Quick Actions",
+      "manageProducts": "Manage Products",
+      "manageBlog": "Manage Blog",
+      "manageSettings": "Manage Settings",
+      "overview": "Overview",
+      "quickStats": "Quick statistics about the site",
+      "totalProducts": "Total Products",
+      "publishedPosts": "Published Posts",
+      "draftPosts": "Draft Posts"
+    },
+    "products": {
+      "title": "Products Management",
+      "subtitle": "Manage and view all company products",
+      "addProduct": "Add New Product",
+      "editProduct": "Edit Product",
+      "deleteProduct": "Delete Product",
+      "deleteConfirm": "Are you sure you want to delete this product?",
+      "duplicateProduct": "Duplicate Product",
+      "productName": "Product Name",
+      "productDescription": "Short Description",
+      "fullDescription": "Full Description",
+      "productCategory": "Category",
+      "productMaterial": "Material",
+      "specifications": "Specifications (one per line)",
+      "specificationsHint": "Write each specification on a separate line (press Enter for a new line)",
+      "applications": "Applications (one per line)",
+      "applicationsHint": "Write each application field on a separate line (press Enter for a new line)",
+      "mainImage": "Main Product Image",
+      "gallery": "Image Gallery",
+      "galleryHint": "You can add additional product images to display in the gallery",
+      "addToGallery": "Add Image to Gallery",
+      "inStock": "In Stock",
+      "isActive": "Active (visible on website)",
+      "saving": "Saving...",
+      "saved": "Product added",
+      "updated": "Product updated",
+      "deleted": "Product deleted successfully",
+      "duplicated": "Product copy created",
+      "duplicateError": "Failed to duplicate product",
+      "saveError": "Save failed",
+      "productList": "Products List",
+      "noImage": "No Image"
+    },
+    "services": {
+      "title": "Services Management",
+      "subtitle": "Manage service categories and available services",
+      "categories": "Categories",
+      "services": "Services",
+      "addCategory": "Add New Category",
+      "editCategory": "Edit Category",
+      "deleteCategory": "Delete Category",
+      "deleteCategoryConfirm": "Are you sure you want to delete this category? All associated services will be deleted.",
+      "categoryDeleted": "Category deleted successfully",
+      "categoryAdded": "Category added",
+      "categoryUpdated": "Category updated",
+      "categoryName": "Name (English)",
+      "categoryNameAr": "Name (Arabic)",
+      "categoryDescription": "Description",
+      "categoryIcon": "Icon",
+      "categoryOrder": "Display Order",
+      "parentCategory": "Parent Category (Optional)",
+      "noParentCategory": "No Parent Category",
+      "isActive": "Active (visible on website)",
+      "categoryList": "Categories List",
+      "parentCategoryName": "Parent Category",
+      "servicesCount": "Services Count",
+      "addService": "Add New Service",
+      "editService": "Edit Service",
+      "deleteService": "Delete Service",
+      "deleteServiceConfirm": "Are you sure you want to delete this service?",
+      "serviceDeleted": "Service deleted successfully",
+      "serviceAdded": "Service added",
+      "serviceUpdated": "Service updated",
+      "serviceName": "Name (English)",
+      "serviceNameAr": "Name (Arabic)",
+      "serviceDescription": "Description",
+      "serviceCategory": "Category",
+      "mainImage": "Main Image",
+      "serviceGallery": "Image Gallery",
+      "addToGallery": "Add Image to Gallery",
+      "capabilities": "Capabilities & Services (one per line)",
+      "equipment": "Equipment (one per line)",
+      "serviceOrder": "Display Order",
+      "allCategories": "All Categories",
+      "noCategories": "Please add a category first before adding services",
+      "serviceList": "Services List",
+      "noImage": "No Image"
+    },
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "login": "Login",
+      "logging": "Logging in...",
+      "error": "Invalid email or password"
+    },
+    "common": {
+      "loading": "Loading...",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes"
+    }
+  },
+  "language": {
+    "ar": "العربية",
+    "en": "English",
+    "switch": "Switch Language"
+  },
+  "partners": {
+    "title": "Partners",
+    "subtitle": "We are proud of our strategic partnerships with major local and international companies",
+    "partner": "Partner"
+  },
+  "blog": {
+    "title": "Our News",
+    "subtitle": "Stay updated on the latest news and articles about the steel industry and modern technologies",
+    "loading": "Loading articles...",
+    "noPosts": "No articles available",
+    "searchPlaceholder": "Search in news...",
+    "readMore": "Read More",
+    "generalNews": "General News",
+    "announcements": "Announcements"
+  },
+  "about": {
+    "title": "About the Company",
+    "tag": "About Us",
+    "subtitle": "Leader in the steel and castings industry in Egypt and the Middle East",
+    "companyName": "Delta Steel Factories Company",
+    "companyDescription": "One of the oldest companies producing steel, cast iron, and steel castings in Egypt and the Middle East, offering a wide range of products including steel billets, cast iron castings, and carbon steel castings",
+    "features": {
+      "steelBillets": "High-quality production of steel billets",
+      "castings": "Cast iron and carbon steel castings",
+      "strategicSectors": "Service for multiple strategic sectors",
+      "qualityStandards": "Commitment to international quality standards"
+    },
+    "stats": {
+      "experience": "50+",
+      "experienceLabel": "Years of Experience",
+      "products": "100+",
+      "productsLabel": "Product Types",
+      "iso": "ISO",
+      "isoLabel": "Quality Certificates",
+      "satisfaction": "100%",
+      "satisfactionLabel": "Customer Satisfaction"
+    },
+    "highlights": {
+      "experience": "Long-standing experience in the steel industry",
+      "experienceDesc": "Decades of excellence and leadership in the industrial field",
+      "diverseProducts": "Diverse products of steel billets and castings",
+      "diverseProductsDesc": "A wide range that meets the needs of various sectors",
+      "strategicService": "Strategic sectors service",
+      "strategicServiceDesc": "We serve Egypt and the Middle East with the highest quality standards",
+      "innovation": "Continuous development and innovation",
+      "innovationDesc": "Continuous investment in modern technology"
+    }
+  },
+  "visionMission": {
+    "title": "Vision & Mission",
+    "vision": {
+      "title": "Vision",
+      "description": "To be the driving force for industrial innovation in the field of steel and castings, achieving global excellence in providing sustainable products and solutions that contribute to the development of the national economy and enhance the competitiveness of the Egyptian industry."
+    },
+    "mission": {
+      "title": "Mission",
+      "description": "We strive to provide distinguished products of steel and castings to achieve customer satisfaction and enhance our competitive capabilities, and we work to utilize the latest technologies, develop our production capabilities, and commit to environmental and social responsibility, to ensure a sustainable future for the Egyptian industry."
+    }
+  },
+  "strategy": {
+    "tag": "Our Strategy",
+    "title": "General Company Strategy",
+    "intro": "Delta Steel Factories implements its strategy based on its vision to be the driving force for industrial innovation in the field of steel and castings, achieving global excellence in providing sustainable products and solutions that contribute to the development of the national economy and enhance the competitiveness of the Egyptian industry.",
+    "commitment": "The company is committed to implementing this strategy, which reflects its direction towards achieving industrial leadership and enhancing its role in supporting the Egyptian economy and building a sustainable industrial future based on excellence and responsibility.",
+    "strategies": {
+      "quality": {
+        "title": "Enhancing Excellence in Product Quality",
+        "description": "Full compliance with international quality specifications (ISO 9001:2015) in all production stages, building a culture of continuous improvement and customer satisfaction."
+      },
+      "innovation": {
+        "title": "Expansion in Innovation and Technology",
+        "description": "Adopting the latest manufacturing and automated operation technologies and digital transformation to increase productivity and reduce waste."
+      },
+      "sustainability": {
+        "title": "Environmental Sustainability and Social Responsibility",
+        "description": "Reducing environmental impact according to ISO 14001:2015 and contributing to sustainable community development."
+      },
+      "safety": {
+        "title": "Implementing an Effective Occupational Health and Safety System",
+        "description": "Creating a safe working environment according to ISO 45001:2018 and protecting employees with training programs and preventive measures."
+      },
+      "hr": {
+        "title": "Human Resource Development and Capacity Building",
+        "description": "Investing in human element development, raising technical and leadership competencies, and spreading a culture of innovation."
+      },
+      "integration": {
+        "title": "Supporting Integration between Operations and Supply Chains",
+        "description": "Enhancing relationships with suppliers, implementing effective planning and inventory management systems to ensure efficiency."
+      }
+    }
+  },
+  "quality": {
+    "tag": "Our Policies",
+    "title": "Quality, Environmental, Safety and Occupational Health Policy",
+    "subtitle": "Full commitment to international quality standards and environmental sustainability",
+    "iso": {
+      "9001": {
+        "standard": "ISO 9001:2015",
+        "label": "Quality Management"
+      },
+      "14001": {
+        "standard": "ISO 14001:2015",
+        "label": "Environmental Management"
+      },
+      "45001": {
+        "standard": "ISO 45001:2018",
+        "label": "Occupational Safety and Health"
+      }
+    },
+    "commitments": {
+      "quality": {
+        "title": "Quality",
+        "description": "Meeting customer requirements and needs to achieve their satisfaction and exceed their expectations"
+      },
+      "environment": {
+        "title": "Environment",
+        "description": "Protecting the environment and reducing the environmental impact of our industrial operations"
+      },
+      "safety": {
+        "title": "Safety",
+        "description": "Providing a safe and healthy work environment for all employees"
+      },
+      "legal": {
+        "title": "Legal Compliance",
+        "description": "Full compliance with local and international laws and regulations"
+      }
+    },
+    "support": {
+      "title": "The company provides full support for developing its activities through:",
+      "points": {
+        "resources": "Optimal utilization of its material and human resources",
+        "suppliers": "Dealing with reliable suppliers to ensure the quality of raw materials",
+        "technology": "Continuous technological development using the latest production methods to improve product quality and reduce costs",
+        "employees": "Raising the efficiency of employees and educating them about the policies and objectives of quality, environmental, and occupational health and safety systems",
+        "knowledge": "Striving to build organizational knowledge that enhances competitiveness and supports the achievement of the company's sustainable strategy"
+      }
+    },
+    "policyStatement": "This policy is declared, published, and available to all stakeholders, including customers, suppliers, and regulatory bodies, to enhance transparency and trust.",
+    "intro": "Delta Steel Factories is one of the oldest companies producing steel, cast iron, and steel castings in Egypt and the Middle East, offering a wide range of products including steel billets, cast iron castings, and carbon steel castings.",
+    "commitmentText": "The company is committed to meeting customer requirements and needs to achieve their satisfaction and exceed their expectations, with full compliance with local and international laws and regulations related to quality, environment, and occupational health and safety, through establishing, documenting, and implementing integrated management systems that align with ISO 9001:2015, ISO 14001:2015, ISO 45001:2018 requirements, supporting the company's strategic direction and considering risks and opportunities associated with its administrative and industrial activities.",
+    "review": "The company periodically reviews this policy to ensure its continued relevance to its objectives and keep pace with changes in the market and legal requirements, with a focus on achieving continuous improvement in all its operations.",
+    "sustainability": "The company also affirms its commitment to protecting the environment and achieving sustainability by reducing the environmental impact of its industrial operations (such as gas emissions and solid waste) and complying with local and international environmental regulations, and ensuring a safe and healthy work environment for all employees through applying preventive measures to reduce occupational risks associated with iron and casting production, such as exposure to heat or heavy equipment."
+  },
+  "ceoMessage": {
+    "tag": "Management Message",
+    "title": "Word of the Managing Director and CEO",
+    "name": "Dr. Ayman Khalil Al-Saie",
+    "position": "Managing Director and CEO of Delta Steel Factories Company",
+    "paragraphs": {
+      "1": "I am pleased to welcome you to the official website of Delta Steel Factories, this ancient industrial edifice that represents one of the fundamental pillars of heavy industries in Egypt and the Middle East.",
+      "2": "Over many decades, the company has contributed to supporting the industrial development journey and meeting the needs of many strategic sectors, most notably the railway sector, engineering industries, and energy industry, through high-quality products of cast iron and steel.",
+      "3": "Today, with the launch of the new foundry equipped with the latest global technologies in casting and smelting and international standards in quality and safety, we have succeeded in doubling production capacities and achieving a qualitative shift that qualifies us to compete with major regional and global foundries.",
+      "4": "We believe that the human element is the real capital of the company, so we pay special attention to qualifying technical and administrative cadres, and applying the latest management and quality systems, ensuring the continuity of our leadership and enhancing our position as a main strategic supplier that can be relied upon.",
+      "5": "Our vision stems from Egypt Vision 2030, which aims to deepen local manufacturing, localize technology, and achieve self-sufficiency, and we are committed to our national role in this field, through our integration with subsidiaries and the Egyptian industrial sector as a whole.",
+      "6": "Finally, we look forward to this website being an interactive window to showcase our capabilities and products, and a gateway for communication with our customers and partners, on the path to achieving more shared successes."
+    },
+    "closing": "And Allah is the Granter of Success."
+  }
+}
+
